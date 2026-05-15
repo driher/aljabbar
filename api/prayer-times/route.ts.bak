@@ -1,0 +1,33 @@
+import { NextResponse } from "next/server";
+
+export async function GET() {
+  try {
+    const today = new Date();
+
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, "0");
+    const day = String(today.getDate()).padStart(2, "0");
+
+    // Bandung = 1219
+    const url = `https://api.myquran.com/v2/sholat/jadwal/1219/${year}/${month}/${day}`;
+
+    const response = await fetch(url, {
+      cache: "no-store",
+    });
+
+    const data = await response.json();
+
+    return NextResponse.json(data);
+  } catch (error) {
+    console.error(error);
+
+    return NextResponse.json(
+      {
+        error: "Failed fetch prayer times",
+      },
+      {
+        status: 500,
+      }
+    );
+  }
+}

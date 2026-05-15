@@ -1,0 +1,244 @@
+"use client";
+
+import { useEffect, useMemo, useState } from "react";
+
+type PrayerData = {
+  subuh: string;
+  dzuhur: string;
+  ashar: string;
+  maghrib: string;
+  isya: string;
+};
+
+type PrayerItem = {
+  name: string;
+  time: string;
+};
+
+export default function PrayerTimes() {
+  const [jadwal, setJadwal] = useState<PrayerData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [timeNow, setTimeNow] = useState("");
+
+  useEffect(() => {
+
+    const fetchPrayerTimes = async () => {
+      try {
+
+        const today = new Date();
+
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, "0");
+        const day = String(today.getDate()).padStart(2, "0");
+
+        const url = `https://api.myquran.com/v2/sholat/jadwal/1219/${year}/${month}/${day}`;
+
+        const res = await fetch(url);
+
+        const json = await res.json();
+
+        if (json?.data?.jadwal) {
+          setJadwal(json.data.jadwal);
+        }
+
+      } catch (error) {
+
+        console.error(error);
+
+      } finally {
+
+        setLoading(false);
+
+      }
+    };
+
+    fetchPrayerTimes();
+
+    const timer = setInterval(() => {
+
+      const now = new Date();
+
+      setTimeNow(
+        now.toLocaleTimeString("id-ID", {
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+        })
+      );
+
+    }, 1000);
+
+    return () => clearInterval(timer);
+
+  }, []);
+
+  const prayers: PrayerItem[] = useMemo(() => {
+
+    if (!jadwal) return [];
+
+    return [
+      {
+        name: "Subuh",
+        time: jadwal.subuh,
+      },
+      {
+        name: "Dzuhur",
+        time: jadwal.dzuhur,
+      },
+      {
+        name: "Ashar",
+        time: jadwal.ashar,
+      },
+      {
+        name: "Maghrib",
+        time: jadwal.maghrib,
+      },
+      {
+        name: "Isya",
+        time: jadwal.isya,
+      },
+    ];
+
+  }, [jadwal]);
+
+  const getNextPrayer = () => {
+
+    const now = new Date();
+
+    for (const prayer of prayers) {
+
+      const [h, m] = prayer.time.split(":");
+
+      const prayerTime = new Date();
+
+      prayerTime.setHours(Number(h));
+      prayerTime.setMinutes(Number(m));
+      prayerTime.setSeconds(0);
+
+      if (prayerTime > now) {
+        return prayer;
+      }
+    }
+
+    return prayers[0];
+  };
+
+  const nextPrayer = getNextPrayer();
+
+  if (loading) {
+    return (
+      <div className="rounded-3xl bg-[#0D2341] p-5 text-white min-h-[220px] flex items-center justify-center">
+        Memuat jadwal...
+      </div>
+    );
+  }
+
+  if (!jadwal || !nextPrayer) {
+    return (
+      <div className="rounded-3xl bg-[#0D2341] p-5 text-white min-h-[220px] flex items-center justify-center">
+        Gagal memuat jadwal
+      </div>
+    );
+  }
+
+  return (
+    <div className="rounded-3xl bg-[#0D2341] p-5 text-white h-full">
+
+      {/* HEADER */}
+      <div className="flex items-start justify-between mb-5">
+
+        <div>
+          <div>
+  <p className="uppercase tracking-[0.25em] text-white/50 text-[10px]">
+    Waktu Salat
+  </p>
+
+  <h3 className="text-xl font-bold mt-1">
+    Bandung
+  </h3>
+
+  <p className="text-white/60 text-xs mt-1">
+    {new Date().toLocaleDateString("id-ID", {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    })}
+  </p>
+</div>
+
+        <div className="text-right">
+          <p className="text-white/50 text-[10px]">
+            Sekarang
+          </p>
+
+          <h3 className="text-sm font-semibold mt-1">
+            {timeNow}
+          </h3>
+        </div>
+
+      </div>
+
+      {/* NEXT PRAYER */}
+      <div className="bg-white/10 border border-white/10 rounded-2xl p-4 mb-4">
+
+        <p className="text-white/60 text-xs">
+          Salat Berikutnya
+        </p>
+
+        <div className="flex items-end justify-between mt-2">
+
+          <div>
+            <h3 className="text-2xl font-bold">
+              {nextPrayer.name}
+            </h3>
+
+            <p className="text-white/60 text-sm mt-1">
+              Waktu adzan
+            </p>
+          </div>
+
+          <h3 className="text-3xl font-bold">
+            {nextPrayer.time}
+          </h3>
+
+        </div>
+      </div>
+
+      {/* LIST */}
+      <div className="grid grid-cols-5 gap-2">
+
+        {prayers.map((item) => {
+
+          const active = item.name === nextPrayer.name;
+
+          return (
+            <div
+              key={item.name}
+              className={`rounded-2xl p-3 text-center border transition ${
+                active
+                  ? "bg-white text-[#0D2341] border-white"
+                  : "bg-white/5 border-white/10"
+              }`}
+            >
+              <p
+                className={`text-[11px] ${
+                  active
+                    ? "text-[#0D2341]/70"
+                    : "text-white/60"
+                }`}
+              >
+                {item.name}
+              </p>
+
+              <h4 className="text-sm font-bold mt-2">
+                {item.time}
+              </h4>
+            </div>
+          );
+        })}
+
+      </div>
+    </div>
+  );
+}

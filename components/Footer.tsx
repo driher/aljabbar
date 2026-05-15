@@ -1,0 +1,92 @@
+import {
+  Globe,
+  Mail,
+  MapPin,
+  Phone,
+} from "lucide-react";
+
+export default function Footer() {
+  return (
+    <footer className="bg-[#0D2341] text-white pt-24 pb-12 rounded-t-[48px]">
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="grid lg:grid-cols-4 gap-14">
+          {/* BRAND */}
+          <div>
+            <h2 className="font-serif text-4xl font-bold">
+              Masjid Raya
+              <br />
+              Al-Jabbar
+            </h2>
+
+            <p className="mt-6 text-white/70 leading-relaxed">
+              Simbol persatuan dan kemajuan
+              Islam modern di Jawa Barat.
+            </p>
+          </div>
+
+          {/* MENU */}
+          <div>
+            <h3 className="text-xl font-semibold">
+              Menu
+            </h3>
+
+            <ul className="mt-6 space-y-4 text-white/70">
+              <li>Beranda</li>
+              <li>Profil</li>
+              <li>Informasi</li>
+              <li>Galeri</li>
+            </ul>
+          </div>
+
+          {/* KONTAK */}
+          <div>
+            <h3 className="text-xl font-semibold">
+              Kontak
+            </h3>
+
+            <ul className="mt-6 space-y-5 text-white/70">
+              <li className="flex items-center gap-3">
+                <MapPin size={18} />
+                Gedebage, Bandung
+              </li>
+
+              <li className="flex items-center gap-3">
+                <Phone size={18} />
+                +62 812 0000 0000
+              </li>
+
+              <li className="flex items-center gap-3">
+                <Mail size={18} />
+                info@aljabbar.id
+              </li>
+            </ul>
+          </div>
+
+          {/* SOSMED */}
+          <div>
+            <h3 className="text-xl font-semibold">
+              Website
+            </h3>
+
+            <div className="flex gap-4 mt-6">
+              <button className="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center hover:bg-white hover:text-[#0D2341] transition">
+                <Globe />
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* BOTTOM */}
+        <div className="border-t border-white/10 mt-16 pt-8 flex flex-col lg:flex-row gap-4 justify-between text-white/50">
+          <p>
+            © 2026 Masjid Raya Al-Jabbar
+          </p>
+
+          <p>
+            Powered by Next.js & WordPress
+          </p>
+        </div>
+      </div>
+    </footer>
+  );
+}

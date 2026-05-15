@@ -24,7 +24,7 @@ import {
 
 export default function HomePage() {
   return (
-    <main className="bg-[#F5F7FA] overflow-x-hidden text-[#0D2341] origin-top-left scale-[0.8] w-[125%]">
+    <main className="bg-[#F5F7FA] overflow-x-hidden text-[#0D2341] origin-top scale-[0.9] w-[111.11%]">
       
       {/* NAVBAR */}
       <Navbar />
