@@ -499,7 +499,7 @@ export default async function NewsDetailPage({
 
               <ArrowLeft size={18} />
 
-              Kembali ke Berita
+              Kembali ke Beranda
 
             </Link>
 

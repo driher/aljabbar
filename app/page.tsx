@@ -12,6 +12,7 @@ import StatsCard from "@/components/StatsCard";
 import EventCard from "@/components/EventCard";
 import NewsCard from "@/components/NewsCard";
 import PrayerTimes from "@/components/PrayerTimes";
+import VideoCard from "@/components/VideoCard";
 
 import {
   Building2,
@@ -273,7 +274,62 @@ export default function HomePage() {
 
               </section>
 
+{/* =========================
+    VIDEO SECTION
+========================= */}
 
+<section className="pb-24">
+
+  <div className="max-w-6xl mx-auto px-4 sm:px-6">
+
+    {/* HEADER */}
+
+    <div className="flex items-end justify-between">
+
+      <div>
+
+        <p
+          className="
+            uppercase
+            tracking-[0.25em]
+            text-[#7A8599]
+            font-medium
+            text-sm
+          "
+        >
+          Multimedia
+        </p>
+
+        <h2
+          className="
+            font-serif
+            text-[40px]
+            lg:text-[52px]
+            leading-tight
+            font-bold
+            text-[#0D2341]
+            mt-5
+          "
+        >
+          Video Terbaru
+        </h2>
+
+      </div>
+
+    </div>
+
+
+    {/* VIDEO */}
+
+    <div className="mt-14">
+
+      <VideoCard />
+
+    </div>
+
+  </div>
+
+</section>
               {/* ==================================================
                   PRAYER + INFO CARDS
               ================================================== */}
