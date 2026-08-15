@@ -34,22 +34,22 @@ export default function Hero() {
         {/* OVERLAY */}
         <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/40 to-transparent" />
 
-        {/* CONTENT */}
-        <div className="relative z-10 max-w-7xl mx-auto px-6 pt-44">
+       {/* CONTENT */}
+<div className="relative z-10 max-w-7xl mx-auto px-6 pt-44">
 
-          <div className="max-w-[650px]">
+  <div className="max-w-[700px] ml-[8%]">
 
-            <h1 className="font-serif text-[88px] leading-[0.95] font-bold text-[#0D2341]">
-              Masjid Raya
-              <br />
-              Al-Jabbar
-            </h1>
+    <h1 className="font-serif text-[88px] leading-[0.95] font-bold text-[#0D2341]">
+      Masjid Raya
+      <br />
+      Al-Jabbar
+    </h1>
 
-            <p className="mt-10 text-[30px] leading-relaxed text-[#344054]">
-              Masjid kebanggaan Jawa Barat,
-              simbol persatuan, keberkahan,
-              dan peradaban Islam modern.
-            </p>
+    <p className="mt-10 text-[30px] leading-relaxed text-[#344054] max-w-[680px]">
+      Masjid kebanggaan Jawa Barat,
+      simbol persatuan, keberkahan,
+      dan peradaban Islam modern.
+    </p>
 
             {/* BUTTONS */}
             <div className="flex flex-wrap gap-5 mt-12">

@@ -16,7 +16,20 @@ import {
 
 export default function Navbar() {
   return (
-    <header className="absolute top-0 left-0 right-0 z-50 bg-transparent">
+    <header
+  className="
+    absolute
+    top-0
+    left-0
+    right-0
+    z-50
+    bg-white/75
+    backdrop-blur-xl
+    border-b
+    border-white/40
+    shadow-[0_4px_20px_rgba(0,0,0,0.04)]
+  "
+>
       <div className="max-w-7xl mx-auto px-6">
 
         <div className="h-24 flex items-center justify-between">
@@ -313,7 +326,7 @@ export default function Navbar() {
 
             <button className="hidden lg:flex items-center gap-2 bg-[#123A63] hover:bg-[#0f3153] transition text-white px-5 py-3 rounded-xl shadow-lg">
               <Heart size={18} />
-              Donasi
+              Infaq/Shadaqah
             </button>
 
             <button className="lg:hidden text-[#0D2341]">
