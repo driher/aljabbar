@@ -7,15 +7,15 @@
 import { useState } from "react";
 
 import {
-  CalendarDays,
+  MessageCircle,
   PlayCircle,
   X,
 } from "lucide-react";
 
 export default function Hero() {
 
-  const [openReservasi, setOpenReservasi] =
-    useState(false);
+const [openAI, setOpenAI] =
+  useState(false);
 
   const [openVideo, setOpenVideo] =
     useState(false);
@@ -54,17 +54,26 @@ export default function Hero() {
             {/* BUTTONS */}
             <div className="flex flex-wrap gap-5 mt-12">
 
-              {/* BUTTON RESERVASI */}
-              <button
-                onClick={() =>
-                  setOpenReservasi(true)
-                }
-                className="bg-[#123A63] hover:bg-[#0f3153] transition text-white rounded-2xl px-8 py-5 flex items-center gap-3 shadow-xl"
-              >
-                <CalendarDays />
-
-                Form Reservasi
-              </button>
+<button
+  type="button"
+  onClick={() => setOpenAI(true)}
+  className="
+    bg-[#123A63]
+    hover:bg-[#0f3153]
+    transition
+    text-white
+    rounded-2xl
+    px-8
+    py-5
+    flex
+    items-center
+    gap-3
+    shadow-xl
+  "
+>
+  <MessageCircle size={22} />
+  Chat dengan AI
+</button>
 
               {/* BUTTON PROFIL */}
               <button
@@ -75,86 +84,96 @@ export default function Hero() {
               >
                 <PlayCircle />
 
-                Profil Masjid
+                Video Profil Masjid
               </button>
 
             </div>
           </div>
         </div>
 
-        {/* =========================
-            MODAL RESERVASI
-        ========================= */}
-        {openReservasi && (
+{/* =========================
+    MODAL CHAT AI
+========================= */}
 
-          <div className="fixed inset-0 z-[999] bg-black/60 backdrop-blur-sm flex items-start justify-center pt-24 p-6 overflow-y-auto">
+{openAI && (
+<div
+  className="
+    fixed
+    inset-0
+    z-[9999]
+    bg-black/70
+    backdrop-blur-sm
+    flex
+    items-start
+    justify-center
+    p-4
+    sm:p-6
+    pt-20
+    lg:pt-24
+    overflow-y-auto
+  "
+  onClick={() => setOpenAI(false)}
+>
+<div
+  className="
+    relative
+    w-full
+    max-w-[500px]
+    h-[700px]
+    sm:h-[720px]
+    bg-white
+    rounded-[28px]
+    overflow-hidden
+    shadow-[0_25px_80px_rgba(0,0,0,0.45)]
+  "
+  onClick={(event) =>
+    event.stopPropagation()
+  }
+>
+      {/* CLOSE */}
 
-            <div className="relative bg-white rounded-[32px] w-full max-w-2xl overflow-hidden shadow-2xl">
+      <button
+        type="button"
+        onClick={() => setOpenAI(false)}
+        aria-label="Tutup Chat AI"
+        className="
+          absolute
+          top-3
+          right-3
+          z-20
+          w-10
+          h-10
+          rounded-full
+          bg-black/60
+          hover:bg-black/80
+          text-white
+          flex
+          items-center
+          justify-center
+          transition
+        "
+      >
+        <X size={22} />
+      </button>
 
-              {/* CLOSE */}
-              <button
-                onClick={() =>
-                  setOpenReservasi(false)
-                }
-                className="absolute top-5 right-5 w-11 h-11 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-[#0D2341]"
-              >
-                <X size={22} />
-              </button>
 
-              {/* CONTENT */}
-              <div className="p-10">
+      {/* AI WIDGET */}
 
-                <p className="uppercase tracking-[0.25em] text-[#7A8599] text-sm">
-                  Reservasi
-                </p>
+      <iframe
+        src="/widget-tanya-ai"
+        title="Tanya AI — Masjid Raya Al-Jabbar"
+        className="
+          w-full
+          h-full
+          border-0
+        "
+        allow="microphone"
+      />
 
-                <h2 className="text-4xl font-bold mt-4 text-[#0D2341]">
-                  Form Kunjungan
-                </h2>
+    </div>
 
-                <p className="text-[#667085] mt-4 leading-relaxed text-lg">
-                  Reservasikan jadwal
-                  kunjungan rombongan,
-                  wisata religi, edukasi
-                  sekolah, dan kegiatan
-                  komunitas di Masjid Raya
-                  Al-Jabbar.
-                </p>
-
-                <div className="flex flex-wrap gap-4 mt-10">
-
-                  {/* FORM */}
-                  <a
-                    href="/reservasi-kunjungan"
-                    className="bg-[#123A63] hover:bg-[#0f3153] transition text-white px-7 py-4 rounded-2xl"
-                  >
-                    Buka Form Reservasi
-                  </a>
-
-                  {/* LIHAT */}
-                  <a
-                    href="/jadwal-kunjungan"
-                    className="border border-[#D0D5DD] hover:bg-gray-50 transition px-7 py-4 rounded-2xl text-[#0D2341]"
-                  >
-                    Lihat Reservasi
-                  </a>
-
-                  {/* CLOSE */}
-                  <button
-                    onClick={() =>
-                      setOpenReservasi(false)
-                    }
-                    className="border border-[#D0D5DD] px-7 py-4 rounded-2xl"
-                  >
-                    Tutup
-                  </button>
-
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
+  </div>
+)}
         {/* =========================
             MODAL VIDEO
         ========================= */}
