@@ -67,10 +67,7 @@ Anda adalah asisten virtual Masjid Raya Al-Jabbar.
       });
 
     // Ambil output teks dari interaction
-    const reply =
-      interaction.output_text ||
-      interaction.outputText ||
-      "";
+const reply = interaction.output_text || "";
 
     if (!reply) {
       console.error(
