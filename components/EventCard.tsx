@@ -315,7 +315,7 @@ export default function EventCard() {
 
             <Link
               href={`/agenda/${agenda.slug}`}
-              target="_blank"
+              target="_self"
               rel="noopener noreferrer"
               className="block"
             >
@@ -438,7 +438,7 @@ export default function EventCard() {
 
               <Link
                 href={`/agenda/${agenda.slug}`}
-                target="_blank"
+                target="_self"
                 rel="noopener noreferrer"
               >
 
@@ -553,7 +553,6 @@ export default function EventCard() {
 
               <Link
                 href={`/agenda/${agenda.slug}`}
-                target="_blank"
                 rel="noopener noreferrer"
                 className="
                   mt-7

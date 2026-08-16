@@ -218,12 +218,10 @@ export default async function NewsDetailPage({
   return (
   <main
     className="
-      bg-[#F5F7FA]
-      overflow-x-hidden
-      text-[#0D2341]
-      origin-top-left
-      scale-[0.8]
-      w-[125%]
+            min-h-screen
+  bg-[#F5F7FA]
+  overflow-x-hidden
+  text-[#0D2341]
     "
   >
     {/* NAVBAR SAMA DENGAN HOMEPAGE */}

@@ -26,96 +26,7 @@ import {
 export default function HomePage() {
   return (
     <>
-     {/* ==================================================
-    FLOATING LEFT PILLAR AD
-    Desktop only
-================================================== */}
-<aside
-  className="
-    hidden
-    xl:flex
-    fixed
-    left-[clamp(16px,calc(50%-650px),280px)]
-    top-[90px]
-    z-[999]
-    w-[130px]
-    h-[450px]
-    items-center
-    justify-center
-  "
->
-  <div
-    className="
-      w-full
-      h-full
-      rounded-2xl
-      overflow-hidden
-      bg-white/90
-      backdrop-blur-md
-      border
-      border-[#E8EDF3]
-      shadow-[0_10px_35px_rgba(0,0,0,0.10)]
-    "
-  >
-    <div className="w-full h-full flex items-center justify-center">
-      <div className="text-center text-[#AAB2BE]">
-        <p className="text-[9px] uppercase tracking-[0.2em]">
-          Advertisement
-        </p>
-
-        <p className="text-[10px] mt-2">
-          130 × 450 px
-        </p>
-      </div>
-    </div>
-  </div>
-</aside>
-
-
-{/* ==================================================
-    FLOATING RIGHT PILLAR AD
-    Desktop only
-================================================== */}
-<aside
-  className="
-    hidden
-    xl:flex
-    fixed
-    right-[clamp(16px,calc(50%-650px),250px)]
-    top-[90px]
-    z-[999]
-    w-[130px]
-    h-[450px]
-    items-center
-    justify-center
-  "
->
-  <div
-    className="
-      w-full
-      h-full
-      rounded-2xl
-      overflow-hidden
-      bg-white/90
-      backdrop-blur-md
-      border
-      border-[#E8EDF3]
-      shadow-[0_10px_35px_rgba(0,0,0,0.10)]
-    "
-  >
-    <div className="w-full h-full flex items-center justify-center">
-      <div className="text-center text-[#AAB2BE]">
-        <p className="text-[9px] uppercase tracking-[0.2em]">
-          Advertisement
-        </p>
-
-        <p className="text-[10px] mt-2">
-          130 × 450 px
-        </p>
-      </div>
-    </div>
-  </div>
-</aside>
+ 
 
 
       {/* ==================================================
@@ -123,12 +34,10 @@ export default function HomePage() {
       ================================================== */}
       <main
         className="
-          bg-[#F5F7FA]
-          overflow-x-hidden
-          text-[#0D2341]
-          origin-top-left
-          scale-[0.8]
-          w-[125%]
+            min-h-screen
+  bg-[#F5F7FA]
+  overflow-x-hidden
+  text-[#0D2341]
         "
       >
 
