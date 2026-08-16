@@ -1,20 +1,52 @@
 // ============================================
 // app/berita/[slug]/page.tsx
+//
 // DETAIL BERITA - MASJID RAYA AL-JABBAR
-// PREMIUM UI
-// CAPTION FOTO WORDPRESS
+//
+// FEATURES:
+// - SEO Metadata
+// - Open Graph
+// - WhatsApp / Facebook / X Thumbnail
+// - Feature Image
+// - Feature Image Caption
+// - Share Buttons
+// - WordPress Article
+// - Premium Responsive UI
 // ============================================
 
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import ShareButtons from "@/components/ShareButtons";
+
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import ShareButtons from "@/components/ShareButtons";
 
 import {
   ArrowLeft,
   CalendarDays,
 } from "lucide-react";
+
+// ============================================
+// CONFIG
+// ============================================
+
+const WORDPRESS_API =
+  "https://pas.akarmusic.com/wp-json/wp/v2/posts";
+
+// ============================================
+// GANTI DENGAN DOMAIN PRODUCTION
+// ============================================
+
+const SITE_URL =
+  "https://aljabbar-eosin.vercel.app";
+
+// ============================================
+// SITE NAME
+// ============================================
+
+const SITE_NAME =
+  "Masjid Raya Al-Jabbar";
 
 // ============================================
 // TYPE
@@ -24,6 +56,8 @@ interface NewsPost {
   id: number;
 
   date: string;
+
+  modified?: string;
 
   slug: string;
 
@@ -41,13 +75,13 @@ interface NewsPost {
 
   featured_media: number;
 
-  photo_caption?: string;
-
   _embedded?: {
     "wp:featuredmedia"?: Array<{
+      id?: number;
+
       source_url: string;
 
-      alt_text: string;
+      alt_text?: string;
 
       caption?: {
         rendered: string;
@@ -66,24 +100,19 @@ interface NewsPost {
 }
 
 // ============================================
-// INTERNAL API
+// CLEAN HTML → TEXT
 // ============================================
 
-const API_URL =
-  "https://pas.akarmusic.com/wp-json/wp/v2/posts";
-
-// ============================================
-// CLEAN HTML
-// ============================================
-
-function cleanText(value: string): string {
+function cleanText(
+  value: string
+): string {
   if (!value) {
     return "";
   }
 
   return value
     .replace(/<[^>]*>/g, "")
-    .replace(/&nbsp;/g, " ")
+    .replace(/&nbsp;/gi, " ")
     .replace(/&#8217;/g, "'")
     .replace(/&#8216;/g, "'")
     .replace(/&#8220;/g, '"')
@@ -91,6 +120,9 @@ function cleanText(value: string): string {
     .replace(/&#038;/g, "&")
     .replace(/&amp;/g, "&")
     .replace(/&#8230;/g, "...")
+    .replace(/&#8211;/g, "–")
+    .replace(/&#8212;/g, "—")
+    .replace(/\s+/g, " ")
     .trim();
 }
 
@@ -98,12 +130,16 @@ function cleanText(value: string): string {
 // FORMAT DATE
 // ============================================
 
-function formatDate(date: string): string {
+function formatDate(
+  date: string
+): string {
   if (!date) {
     return "";
   }
 
-  return new Date(date).toLocaleDateString(
+  return new Date(
+    date
+  ).toLocaleDateString(
     "id-ID",
     {
       weekday: "long",
@@ -115,56 +151,57 @@ function formatDate(date: string): string {
 }
 
 // ============================================
-// GET IMAGE
+// GET FEATURE IMAGE
 // ============================================
 
-function getImage(post: NewsPost): string {
+function getImage(
+  post: NewsPost
+): string {
   return (
     post._embedded
       ?.["wp:featuredmedia"]
       ?. [0]
       ?.source_url ||
-    "/news-placeholder.jpg"
+    `${SITE_URL}/news-placeholder.jpg`
   );
 }
 
 // ============================================
-// GET CAPTION
+// GET FEATURE IMAGE CAPTION
 // ============================================
+//
+// HANYA dari:
+//
+// WordPress
+// → Media
+// → Feature Image
+// → Caption
+//
+// Tidak mengambil caption dari artikel.
+//
 
-function getCaption(post: NewsPost): string {
-  // PRIORITAS 1
-  // Caption hasil normalisasi route.ts
-
-  if (post.photo_caption) {
-    return cleanText(
-      post.photo_caption
-    );
-  }
-
-  // PRIORITAS 2
-  // Caption dari featured media
-
-  const embeddedCaption =
+function getCaption(
+  post: NewsPost
+): string {
+  const caption =
     post._embedded
       ?.["wp:featuredmedia"]
       ?. [0]
-      ?.caption?.rendered;
+      ?.caption
+      ?.rendered || "";
 
-  if (embeddedCaption) {
-    return cleanText(
-      embeddedCaption
-    );
-  }
-
-  return "";
+  return cleanText(
+    caption
+  );
 }
 
 // ============================================
-// GET ALT
+// GET IMAGE ALT
 // ============================================
 
-function getAlt(post: NewsPost): string {
+function getAlt(
+  post: NewsPost
+): string {
   return (
     post._embedded
       ?.["wp:featuredmedia"]
@@ -181,13 +218,51 @@ function getAlt(post: NewsPost): string {
 // GET AUTHOR
 // ============================================
 
-function getAuthor(post: NewsPost): string {
+function getAuthor(
+  post: NewsPost
+): string {
   return (
     post._embedded
       ?.author
       ?. [0]
       ?.name || ""
   );
+}
+
+// ============================================
+// CLEAN ARTICLE CONTENT
+// ============================================
+//
+// WordPress dapat mengirim:
+//
+// <figure>
+//   <img>
+//   <figcaption>Caption...</figcaption>
+// </figure>
+//
+// Caption tersebut tidak kita tampilkan.
+//
+// Feature Image caption ditampilkan terpisah
+// tepat di bawah foto utama.
+//
+
+function cleanArticleContent(
+  html: string
+): string {
+  if (!html) {
+    return "";
+  }
+
+  return html
+    .replace(
+      /<figcaption\b[^>]*>[\s\S]*?<\/figcaption>/gi,
+      ""
+    )
+    .replace(
+      /<figure\b[^>]*>\s*<\/figure>/gi,
+      ""
+    )
+    .trim();
 }
 
 // ============================================
@@ -199,18 +274,23 @@ async function getNews(
 ): Promise<NewsPost | null> {
   try {
     const url =
-      `${API_URL}?slug=${encodeURIComponent(
+      `${WORDPRESS_API}?slug=${encodeURIComponent(
         slug
       )}&_embed`;
 
     const response =
-      await fetch(url, {
-        headers: {
-          Accept: "application/json",
-        },
+      await fetch(
+        url,
+        {
+          headers: {
+            Accept:
+              "application/json",
+          },
 
-        cache: "no-store",
-      });
+          cache:
+            "no-store",
+        }
+      );
 
     if (!response.ok) {
       return null;
@@ -226,83 +306,10 @@ async function getNews(
       return null;
     }
 
-    const post =
-      data[0] as NewsPost;
-
-    // ========================================
-    // FALLBACK:
-    // JIKA API POST LANGSUNG BELUM MEMILIKI
-    // photo_caption, AMBIL MEDIA SECARA LANGSUNG
-    // ========================================
-
-    if (
-      !post.photo_caption &&
-      post.featured_media
-    ) {
-      try {
-        const mediaResponse =
-          await fetch(
-            `https://pas.akarmusic.com/wp-json/wp/v2/media/${post.featured_media}`,
-            {
-              headers: {
-                Accept:
-                  "application/json",
-              },
-              cache: "no-store",
-            }
-          );
-
-        if (mediaResponse.ok) {
-          const media =
-            await mediaResponse.json();
-
-          if (
-            media?.caption?.rendered
-          ) {
-            post.photo_caption =
-              media.caption.rendered;
-          }
-
-          // Update image jika diperlukan
-          if (
-            media?.source_url &&
-            !post._embedded
-              ?.["wp:featuredmedia"]
-              ?. [0]
-          ) {
-            post._embedded = {
-              ...post._embedded,
-
-              "wp:featuredmedia": [
-                {
-                  source_url:
-                    media.source_url,
-
-                  alt_text:
-                    media.alt_text ||
-                    "",
-
-                  caption: {
-                    rendered:
-                      media.caption
-                        ?.rendered || "",
-                  },
-                },
-              ],
-            };
-          }
-        }
-      } catch (error) {
-        console.error(
-          "MEDIA CAPTION ERROR:",
-          error
-        );
-      }
-    }
-
-    return post;
+    return data[0] as NewsPost;
 
   } catch (error) {
+
     console.error(
       "DETAIL NEWS ERROR:",
       error
@@ -310,6 +317,166 @@ async function getNews(
 
     return null;
   }
+}
+
+// ============================================
+// SEO + OPEN GRAPH METADATA
+// ============================================
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{
+    slug: string;
+  }>;
+}): Promise<Metadata> {
+
+  const {
+    slug,
+  } = await params;
+
+  const post =
+    await getNews(slug);
+
+  // ==========================================
+  // NOT FOUND
+  // ==========================================
+
+  if (!post) {
+    return {
+      title:
+        `Berita Tidak Ditemukan | ${SITE_NAME}`,
+
+      description:
+        `Berita ${SITE_NAME} tidak ditemukan.`,
+    };
+  }
+
+  // ==========================================
+  // DATA
+  // ==========================================
+
+  const title =
+    cleanText(
+      post.title.rendered
+    );
+
+  const description =
+    cleanText(
+      post.excerpt
+        ?.rendered || ""
+    ).slice(0, 160);
+
+  const image =
+    getImage(post);
+
+  const pageUrl =
+    `${SITE_URL}/berita/${post.slug}`;
+
+  // ==========================================
+  // METADATA
+  // ==========================================
+
+  return {
+
+    title:
+      `${title} | ${SITE_NAME}`,
+
+    description,
+
+    keywords: [
+      "Masjid Raya Al-Jabbar",
+      "Masjid Al-Jabbar",
+      "Bandung",
+      "berita masjid",
+      "berita Islam",
+      title,
+    ],
+
+    authors: [
+      {
+        name:
+          getAuthor(post) ||
+          SITE_NAME,
+      },
+    ],
+
+    alternates: {
+      canonical:
+        pageUrl,
+    },
+
+    openGraph: {
+
+      type:
+        "article",
+
+      locale:
+        "id_ID",
+
+      url:
+        pageUrl,
+
+      title,
+
+      description,
+
+      siteName:
+        SITE_NAME,
+
+      publishedTime:
+        post.date,
+
+      modifiedTime:
+        post.modified ||
+        post.date,
+
+      authors:
+        getAuthor(post)
+          ? [
+              getAuthor(post),
+            ]
+          : undefined,
+
+      images: [
+        {
+          url:
+            image,
+
+          width:
+            1200,
+
+          height:
+            630,
+
+          alt:
+            title,
+        },
+      ],
+    },
+
+    twitter: {
+
+      card:
+        "summary_large_image",
+
+      title,
+
+      description,
+
+      images: [
+        image,
+      ],
+    },
+
+    robots: {
+      index:
+        true,
+
+      follow:
+        true,
+    },
+  };
 }
 
 // ============================================
@@ -323,8 +490,14 @@ export default async function NewsDetailPage({
     slug: string;
   }>;
 }) {
-  const { slug } =
-    await params;
+
+  const {
+    slug,
+  } = await params;
+
+  // ==========================================
+  // GET NEWS
+  // ==========================================
 
   const post =
     await getNews(slug);
@@ -337,6 +510,10 @@ export default async function NewsDetailPage({
     notFound();
   }
 
+  // ==========================================
+  // DATA
+  // ==========================================
+
   const image =
     getImage(post);
 
@@ -348,6 +525,18 @@ export default async function NewsDetailPage({
 
   const author =
     getAuthor(post);
+
+  const articleContent =
+    cleanArticleContent(
+      post.content.rendered
+    );
+
+  // ==========================================
+  // PAGE URL
+  // ==========================================
+
+  const pageUrl =
+    `${SITE_URL}/berita/${post.slug}`;
 
   // ==========================================
   // RENDER
@@ -370,7 +559,7 @@ export default async function NewsDetailPage({
       <Navbar />
 
       {/* ======================================
-          CONTENT
+          ARTICLE
       ======================================= */}
 
       <article
@@ -394,7 +583,11 @@ export default async function NewsDetailPage({
               BACK BUTTON
           =================================== */}
 
-          <div className="mb-8">
+          <div
+            className="
+              mb-8
+            "
+          >
 
             <Link
               href="/berita"
@@ -409,11 +602,13 @@ export default async function NewsDetailPage({
                 transition-colors
               "
             >
+
               <ArrowLeft
                 size={17}
               />
 
               Kembali ke Berita
+
             </Link>
 
           </div>
@@ -428,6 +623,8 @@ export default async function NewsDetailPage({
               mx-auto
             "
           >
+
+            {/* META */}
 
             <div
               className="
@@ -457,6 +654,7 @@ export default async function NewsDetailPage({
                   gap-2
                 "
               >
+
                 <CalendarDays
                   size={14}
                 />
@@ -464,9 +662,12 @@ export default async function NewsDetailPage({
                 {formatDate(
                   post.date
                 )}
+
               </span>
 
             </div>
+
+            {/* TITLE */}
 
             <h1
               className="
@@ -480,10 +681,14 @@ export default async function NewsDetailPage({
                 mt-5
               "
             >
+
               {cleanText(
                 post.title.rendered
               )}
+
             </h1>
+
+            {/* AUTHOR */}
 
             {author && (
               <p
@@ -493,7 +698,9 @@ export default async function NewsDetailPage({
                   text-[#7A8599]
                 "
               >
-                Penulis: {" "}
+
+                Oleh{" "}
+
                 <span
                   className="
                     font-semibold
@@ -502,19 +709,24 @@ export default async function NewsDetailPage({
                 >
                   {author}
                 </span>
+
               </p>
             )}
 
+            {/* =================================
+                SHARE BUTTONS
+            ================================== */}
 
-<ShareButtons
-  title={cleanText(
-    post.title.rendered
-  )}
-/>
+            <ShareButtons
+              title={cleanText(
+                post.title.rendered
+              )}
+            />
+
           </header>
 
           {/* ==================================
-              FEATURED IMAGE
+              FEATURE IMAGE
           =================================== */}
 
           <figure
@@ -524,6 +736,8 @@ export default async function NewsDetailPage({
               mt-10
             "
           >
+
+            {/* IMAGE */}
 
             <div
               className="
@@ -551,22 +765,25 @@ export default async function NewsDetailPage({
             </div>
 
             {/* =================================
-                CAPTION FOTO
+                FEATURE IMAGE CAPTION
             ================================== */}
 
             {caption && (
               <figcaption
                 className="
                   mt-3
-                  px-2
+                  px-4
+                  text-center
                   text-xs
                   sm:text-sm
                   leading-relaxed
-                  text-[#667085]
+                  text-[#7A8599]
                   italic
                 "
               >
+
                 {caption}
+
               </figcaption>
             )}
 
@@ -610,7 +827,7 @@ export default async function NewsDetailPage({
                 "
                 dangerouslySetInnerHTML={{
                   __html:
-                    post.content.rendered,
+                    articleContent,
                 }}
               />
 
@@ -619,7 +836,7 @@ export default async function NewsDetailPage({
           </div>
 
           {/* ==================================
-              BACK BUTTON
+              BOTTOM BACK BUTTON
           =================================== */}
 
           <div
@@ -675,6 +892,7 @@ export default async function NewsDetailPage({
       <style
         dangerouslySetInnerHTML={{
           __html: `
+
             .news-content p {
               margin-bottom: 1.35rem;
             }
@@ -749,13 +967,16 @@ export default async function NewsDetailPage({
               margin: 2rem 0;
             }
 
+            /*
+             * CAPTION DARI GAMBAR
+             * DI DALAM ISI ARTIKEL
+             *
+             * Dihilangkan agar hanya caption
+             * Feature Image yang tampil.
+             */
+
             .news-content figcaption {
-              color: #7A8599;
-              font-size: 0.8rem;
-              line-height: 1.5;
-              font-style: italic;
-              margin-top: -1.5rem;
-              margin-bottom: 2rem;
+              display: none !important;
             }
 
             .news-content iframe {
@@ -788,6 +1009,7 @@ export default async function NewsDetailPage({
             }
 
             @media (max-width: 640px) {
+
               .news-content {
                 font-size: 16px;
                 line-height: 1.8;
@@ -808,7 +1030,9 @@ export default async function NewsDetailPage({
               .news-content img {
                 border-radius: 16px;
               }
+
             }
+
           `,
         }}
       />
