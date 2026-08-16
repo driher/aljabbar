@@ -298,15 +298,7 @@ export default function HomePage() {
 
       <div>
 
-        <p className="
-          uppercase
-          tracking-[0.25em]
-          text-[#7A8599]
-          font-medium
-          text-sm
-        ">
-          Kegiatan
-        </p>
+ 
 
         <h2 className="
           font-serif
@@ -356,19 +348,6 @@ export default function HomePage() {
             <div className="flex items-end justify-between">
 
               <div>
-
-                <p
-                  className="
-                    uppercase
-                    tracking-[0.25em]
-                    text-[#7A8599]
-                    font-medium
-                    text-sm
-                  "
-                >
-                  Galeri
-                </p>
-
 
                 <h2
                   className="
