@@ -1,13 +1,29 @@
 // ============================================
 // components/Navbar.tsx
 // NAVBAR PREMIUM - MASJID RAYA AL-JABBAR
+//
+// FEATURES:
+// - Desktop navigation
+// - Desktop dropdown
+// - Mobile navigation
+// - Mobile accordion
+// - Search desktop
+// - Search mobile
+// - Search → /berita?search=...
+// - Infaq / Shadaqah
 // ============================================
 
 "use client";
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+
+import {
+  FormEvent,
+  useState,
+} from "react";
+
+import { useRouter } from "next/navigation";
 
 import {
   ChevronDown,
@@ -16,7 +32,6 @@ import {
   Search,
   X,
 } from "lucide-react";
-
 
 // ============================================
 // MENU DATA
@@ -57,7 +72,6 @@ const profilMenu = [
   },
 ];
 
-
 const informasiMenu = [
   {
     label: "Berita Masjid",
@@ -67,7 +81,7 @@ const informasiMenu = [
     label: "Artikel Islami",
     href: "/informasi/artikel-islami",
   },
-    {
+  {
     label: "Pengumuman",
     href: "/informasi/pengumuman",
   },
@@ -84,7 +98,6 @@ const informasiMenu = [
     href: "/informasi/parkir-dan-akses",
   },
 ];
-
 
 const kegiatanMenu = [
   {
@@ -125,7 +138,6 @@ const kegiatanMenu = [
   },
 ];
 
-
 const galeriMenu = [
   {
     label: "Foto Kegiatan",
@@ -156,7 +168,6 @@ const galeriMenu = [
     href: "/galeri/virtual-tour",
   },
 ];
-
 
 const kontakMenu = [
   {
@@ -193,9 +204,8 @@ const kontakMenu = [
   },
 ];
 
-
 // ============================================
-// DROPDOWN DESKTOP
+// DESKTOP DROPDOWN
 // ============================================
 
 function DesktopDropdown({
@@ -204,10 +214,12 @@ function DesktopDropdown({
   align = "left",
 }: {
   label: string;
+
   items: {
     label: string;
     href: string;
   }[];
+
   align?: "left" | "right";
 }) {
   return (
@@ -227,6 +239,7 @@ function DesktopDropdown({
           transition
         "
       >
+
         {label}
 
         <ChevronDown
@@ -238,8 +251,8 @@ function DesktopDropdown({
             group-hover:rotate-180
           "
         />
-      </button>
 
+      </button>
 
       <div
         className={`
@@ -249,7 +262,11 @@ function DesktopDropdown({
           hidden
           group-hover:block
           z-[300]
-          ${align === "right" ? "right-0" : "left-0"}
+          ${
+            align === "right"
+              ? "right-0"
+              : "left-0"
+          }
         `}
       >
 
@@ -268,25 +285,27 @@ function DesktopDropdown({
           "
         >
 
-          {items.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="
-                block
-                rounded-xl
-                px-4
-                py-3
-                text-[14px]
-                text-[#344054]
-                hover:bg-[#F5F7FA]
-                hover:text-[#123A63]
-                transition
-              "
-            >
-              {item.label}
-            </Link>
-          ))}
+          {items.map(
+            (item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="
+                  block
+                  rounded-xl
+                  px-4
+                  py-3
+                  text-[14px]
+                  text-[#344054]
+                  hover:bg-[#F5F7FA]
+                  hover:text-[#123A63]
+                  transition
+                "
+              >
+                {item.label}
+              </Link>
+            )
+          )}
 
         </div>
 
@@ -295,7 +314,6 @@ function DesktopDropdown({
     </div>
   );
 }
-
 
 // ============================================
 // MOBILE ACCORDION
@@ -309,16 +327,25 @@ function MobileAccordion({
   onNavigate,
 }: {
   label: string;
+
   items: {
     label: string;
     href: string;
   }[];
+
   open: boolean;
+
   onToggle: () => void;
+
   onNavigate: () => void;
 }) {
   return (
-    <div className="border-t border-[#E8EDF3]">
+    <div
+      className="
+        border-t
+        border-[#E8EDF3]
+      "
+    >
 
       <button
         type="button"
@@ -337,50 +364,70 @@ function MobileAccordion({
         "
       >
 
-        <span>{label}</span>
+        <span>
+          {label}
+        </span>
 
         <ChevronDown
           size={18}
           className={`
             transition-transform
             duration-200
-            ${open ? "rotate-180" : ""}
+            ${
+              open
+                ? "rotate-180"
+                : ""
+            }
           `}
         />
 
       </button>
-
 
       <div
         className={`
           overflow-hidden
           transition-all
           duration-200
-          ${open ? "max-h-[700px] pb-3" : "max-h-0"}
+          ${
+            open
+              ? "max-h-[700px] pb-3"
+              : "max-h-0"
+          }
         `}
       >
 
-        <div className="pl-4 flex flex-col gap-1">
+        <div
+          className="
+            pl-4
+            flex
+            flex-col
+            gap-1
+          "
+        >
 
-          {items.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              onClick={onNavigate}
-              className="
-                rounded-xl
-                px-3
-                py-2.5
-                text-[14px]
-                text-[#667085]
-                hover:bg-[#F5F7FA]
-                hover:text-[#123A63]
-                transition
-              "
-            >
-              {item.label}
-            </Link>
-          ))}
+          {items.map(
+            (item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={
+                  onNavigate
+                }
+                className="
+                  rounded-xl
+                  px-3
+                  py-2.5
+                  text-[14px]
+                  text-[#667085]
+                  hover:bg-[#F5F7FA]
+                  hover:text-[#123A63]
+                  transition
+                "
+              >
+                {item.label}
+              </Link>
+            )
+          )}
 
         </div>
 
@@ -390,25 +437,57 @@ function MobileAccordion({
   );
 }
 
-
 // ============================================
 // NAVBAR
 // ============================================
 
 export default function Navbar() {
 
-  const [mobileOpen, setMobileOpen] =
-    useState(false);
+  const router =
+    useRouter();
 
-  const [mobileMenu, setMobileMenu] =
-    useState<string | null>(null);
+  // ==========================================
+  // MOBILE
+  // ==========================================
 
+  const [
+    mobileOpen,
+    setMobileOpen,
+  ] = useState(false);
+
+  const [
+    mobileMenu,
+    setMobileMenu,
+  ] = useState<
+    string | null
+  >(null);
+
+  // ==========================================
+  // SEARCH
+  // ==========================================
+
+  const [
+    searchOpen,
+    setSearchOpen,
+  ] = useState(false);
+
+  const [
+    searchQuery,
+    setSearchQuery,
+  ] = useState("");
+
+  // ==========================================
+  // CLOSE MOBILE
+  // ==========================================
 
   const closeMobile = () => {
     setMobileOpen(false);
     setMobileMenu(null);
   };
 
+  // ==========================================
+  // TOGGLE MOBILE MENU
+  // ==========================================
 
   const toggleMobileMenu = (
     menu: string
@@ -419,9 +498,57 @@ export default function Navbar() {
         ? null
         : menu
     );
-
   };
 
+  // ==========================================
+  // SEARCH SUBMIT
+  // ==========================================
+
+  const submitSearch = (
+    event: FormEvent
+  ) => {
+
+    event.preventDefault();
+
+    const query =
+      searchQuery.trim();
+
+    if (!query) {
+      return;
+    }
+
+    setSearchOpen(false);
+    setSearchQuery("");
+
+    closeMobile();
+
+    router.push(
+      `/berita?search=${encodeURIComponent(
+        query
+      )}`
+    );
+  };
+
+  // ==========================================
+  // OPEN SEARCH
+  // ==========================================
+
+  const openSearch = () => {
+    setSearchOpen(true);
+  };
+
+  // ==========================================
+  // CLOSE SEARCH
+  // ==========================================
+
+  const closeSearch = () => {
+    setSearchOpen(false);
+    setSearchQuery("");
+  };
+
+  // ==========================================
+  // RETURN
+  // ==========================================
 
   return (
     <header
@@ -448,9 +575,9 @@ export default function Navbar() {
         "
       >
 
-        {/* ==========================================
+        {/* ======================================
             NAVBAR BAR
-        ========================================== */}
+        ======================================= */}
 
         <div
           className="
@@ -462,13 +589,16 @@ export default function Navbar() {
           "
         >
 
-          {/* ========================================
+          {/* ====================================
               LOGO
-          ======================================== */}
+          ===================================== */}
 
           <Link
             href="/"
-            onClick={closeMobile}
+            onClick={() => {
+              closeMobile();
+              closeSearch();
+            }}
             className="
               flex
               items-center
@@ -492,10 +622,9 @@ export default function Navbar() {
 
           </Link>
 
-
-          {/* ========================================
+          {/* ====================================
               DESKTOP NAVIGATION
-          ======================================== */}
+          ===================================== */}
 
           <nav
             className="
@@ -521,7 +650,6 @@ export default function Navbar() {
             >
               Beranda
             </Link>
-
 
             <DesktopDropdown
               label="Profil"
@@ -567,46 +695,145 @@ export default function Navbar() {
 
           </nav>
 
-
-          {/* ========================================
+          {/* ====================================
               RIGHT AREA
-          ======================================== */}
+          ===================================== */}
 
-          <div className="
-            flex
-            items-center
-            gap-3
-            shrink-0
-          ">
+          <div
+            className="
+              flex
+              items-center
+              gap-3
+              shrink-0
+            "
+          >
 
-            {/* SEARCH DESKTOP */}
+            {/* ==================================
+                SEARCH DESKTOP
+            =================================== */}
 
-            <button
-              type="button"
-              aria-label="Pencarian"
-              className="
-                hidden
-                lg:flex
-                w-9
-                h-9
-                items-center
-                justify-center
-                rounded-xl
-                text-[#0D2341]
-                hover:bg-[#F5F7FA]
-                transition
-              "
-            >
+            {searchOpen ? (
 
-              <Search
-                size={19}
-                strokeWidth={1.8}
-              />
+              <form
+                onSubmit={
+                  submitSearch
+                }
+                className="
+                  hidden
+                  lg:flex
+                  items-center
+                  gap-2
+                  w-[290px]
+                  h-10
+                  rounded-xl
+                  border
+                  border-[#D9E0E8]
+                  bg-white
+                  px-3
+                  shadow-sm
+                  animate-in
+                  fade-in
+                  slide-in-from-right-2
+                  duration-200
+                "
+              >
 
-            </button>
+                <Search
+                  size={18}
+                  strokeWidth={1.8}
+                  className="
+                    text-[#667085]
+                    shrink-0
+                  "
+                />
 
+                <input
+                  type="search"
+                  autoFocus
+                  value={
+                    searchQuery
+                  }
+                  onChange={(
+                    event
+                  ) =>
+                    setSearchQuery(
+                      event.target.value
+                    )
+                  }
+                  placeholder="Cari berita..."
+                  aria-label="Cari berita"
+                  className="
+                    flex-1
+                    min-w-0
+                    bg-transparent
+                    outline-none
+                    text-[14px]
+                    text-[#0D2341]
+                    placeholder:text-[#98A2B3]
+                  "
+                />
 
-            {/* INFAQ DESKTOP */}
+                <button
+                  type="button"
+                  onClick={
+                    closeSearch
+                  }
+                  aria-label="Tutup pencarian"
+                  className="
+                    w-7
+                    h-7
+                    flex
+                    items-center
+                    justify-center
+                    rounded-lg
+                    text-[#667085]
+                    hover:bg-[#F5F7FA]
+                    transition
+                  "
+                >
+
+                  <X
+                    size={16}
+                  />
+
+                </button>
+
+              </form>
+
+            ) : (
+
+              <button
+                type="button"
+                aria-label="Pencarian"
+                onClick={
+                  openSearch
+                }
+                className="
+                  hidden
+                  lg:flex
+                  w-9
+                  h-9
+                  items-center
+                  justify-center
+                  rounded-xl
+                  text-[#0D2341]
+                  hover:bg-[#F5F7FA]
+                  transition
+                "
+              >
+
+                <Search
+                  size={19}
+                  strokeWidth={1.8}
+                />
+
+              </button>
+
+            )}
+
+            {/* ==================================
+                INFAQ DESKTOP
+            =================================== */}
 
             <button
               type="button"
@@ -637,10 +864,9 @@ export default function Navbar() {
 
             </button>
 
-
-            {/* ======================================
+            {/* ==================================
                 MOBILE MENU BUTTON
-            ====================================== */}
+            =================================== */}
 
             <button
               type="button"
@@ -649,7 +875,9 @@ export default function Navbar() {
                   ? "Tutup menu"
                   : "Buka menu"
               }
-              aria-expanded={mobileOpen}
+              aria-expanded={
+                mobileOpen
+              }
               onClick={() =>
                 setMobileOpen(
                   !mobileOpen
@@ -671,9 +899,13 @@ export default function Navbar() {
             >
 
               {mobileOpen ? (
-                <X size={24} />
+                <X
+                  size={24}
+                />
               ) : (
-                <Menu size={24} />
+                <Menu
+                  size={24}
+                />
               )}
 
             </button>
@@ -682,10 +914,9 @@ export default function Navbar() {
 
         </div>
 
-
-        {/* ==========================================
+        {/* ======================================
             MOBILE MENU
-        ========================================== */}
+        ======================================= */}
 
         {mobileOpen && (
 
@@ -711,11 +942,104 @@ export default function Navbar() {
               "
             >
 
-              {/* BERANDA */}
+              {/* =================================
+                  MOBILE SEARCH
+              ================================== */}
+
+              <form
+                onSubmit={
+                  submitSearch
+                }
+                className="
+                  flex
+                  items-center
+                  gap-2
+                  mb-3
+                  rounded-xl
+                  border
+                  border-[#E8EDF3]
+                  bg-[#F8FAFC]
+                  px-3
+                  h-11
+                "
+              >
+
+                <Search
+                  size={18}
+                  strokeWidth={1.8}
+                  className="
+                    text-[#667085]
+                    shrink-0
+                  "
+                />
+
+                <input
+                  type="search"
+                  value={
+                    searchQuery
+                  }
+                  onChange={(
+                    event
+                  ) =>
+                    setSearchQuery(
+                      event.target.value
+                    )
+                  }
+                  placeholder="Cari berita..."
+                  aria-label="Cari berita"
+                  className="
+                    flex-1
+                    min-w-0
+                    bg-transparent
+                    outline-none
+                    text-[14px]
+                    text-[#0D2341]
+                    placeholder:text-[#98A2B3]
+                  "
+                />
+
+                {searchQuery && (
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setSearchQuery(
+                        ""
+                      )
+                    }
+                    aria-label="Hapus pencarian"
+                    className="
+                      w-7
+                      h-7
+                      flex
+                      items-center
+                      justify-center
+                      rounded-lg
+                      text-[#667085]
+                      hover:bg-white
+                      transition
+                    "
+                  >
+
+                    <X
+                      size={16}
+                    />
+
+                  </button>
+
+                )}
+
+              </form>
+
+              {/* =================================
+                  BERANDA
+              ================================== */}
 
               <Link
                 href="/"
-                onClick={closeMobile}
+                onClick={
+                  closeMobile
+                }
                 className="
                   block
                   py-4
@@ -728,23 +1052,36 @@ export default function Navbar() {
                 Beranda
               </Link>
 
-
-              {/* PROFIL */}
+              {/* =================================
+                  PROFIL
+              ================================== */}
 
               <MobileAccordion
                 label="Profil"
                 items={profilMenu}
-                open={mobileMenu === "profil"}
-                onToggle={() =>
-                  toggleMobileMenu("profil")
+                open={
+                  mobileMenu ===
+                  "profil"
                 }
-                onNavigate={closeMobile}
+                onToggle={() =>
+                  toggleMobileMenu(
+                    "profil"
+                  )
+                }
+                onNavigate={
+                  closeMobile
+                }
               />
 
+              {/* =================================
+                  BERITA
+              ================================== */}
 
               <Link
                 href="/berita"
-                onClick={closeMobile}
+                onClick={
+                  closeMobile
+                }
                 className="
                   block
                   py-4
@@ -757,11 +1094,15 @@ export default function Navbar() {
                 Berita
               </Link>
 
-              {/* KEGIATAN */}
+              {/* =================================
+                  AGENDA
+              ================================== */}
 
-                           <Link
+              <Link
                 href="/agenda"
-                onClick={closeMobile}
+                onClick={
+                  closeMobile
+                }
                 className="
                   block
                   py-4
@@ -774,46 +1115,61 @@ export default function Navbar() {
                 Agenda Kegiatan
               </Link>
 
-
-              {/* GALERI */}
+              {/* =================================
+                  GALERI
+              ================================== */}
 
               <MobileAccordion
                 label="Galeri"
                 items={galeriMenu}
                 open={
-                  mobileMenu === "galeri"
+                  mobileMenu ===
+                  "galeri"
                 }
                 onToggle={() =>
-                  toggleMobileMenu("galeri")
+                  toggleMobileMenu(
+                    "galeri"
+                  )
                 }
-                onNavigate={closeMobile}
+                onNavigate={
+                  closeMobile
+                }
               />
 
-
-              {/* KONTAK */}
+              {/* =================================
+                  KONTAK
+              ================================== */}
 
               <MobileAccordion
                 label="Kontak"
                 items={kontakMenu}
                 open={
-                  mobileMenu === "kontak"
+                  mobileMenu ===
+                  "kontak"
                 }
                 onToggle={() =>
-                  toggleMobileMenu("kontak")
+                  toggleMobileMenu(
+                    "kontak"
+                  )
                 }
-                onNavigate={closeMobile}
+                onNavigate={
+                  closeMobile
+                }
               />
 
+              {/* =================================
+                  INFAQ MOBILE
+              ================================== */}
 
-              {/* INFAQ */}
-
-              <div className="
-                border-t
-                border-[#E8EDF3]
-                mt-2
-                pt-4
-                pb-3
-              ">
+              <div
+                className="
+                  border-t
+                  border-[#E8EDF3]
+                  mt-2
+                  pt-4
+                  pb-3
+                "
+              >
 
                 <button
                   type="button"

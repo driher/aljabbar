@@ -1,11 +1,30 @@
 // ============================================
 // app/berita/page.tsx
 // INDEX BERITA - MASJID RAYA AL-JABBAR
+//
+// FEATURES:
+// - Search WordPress
+// - Search via ?search=
+// - Headline berita
+// - 3 berita sekunder
+// - Berita lainnya
+// - Load More
+// - Responsive
+// - Premium UI
 // ============================================
 
 "use client";
 
-import { useEffect, useState } from "react";
+import {
+  Suspense,
+  useEffect,
+  useState,
+} from "react";
+
+import {
+  useSearchParams,
+} from "next/navigation";
+
 import Link from "next/link";
 
 import Navbar from "@/components/Navbar";
@@ -16,8 +35,9 @@ import {
   ArrowRight,
   CalendarDays,
   Loader2,
+  Search,
+  X,
 } from "lucide-react";
-
 
 // ==================================================
 // TYPE
@@ -43,25 +63,30 @@ interface NewsPost {
   _embedded?: {
     "wp:featuredmedia"?: Array<{
       source_url: string;
-      alt_text: string;
+
+      alt_text?: string;
+
+      caption?: {
+        rendered: string;
+      };
     }>;
   };
 }
 
-
 // ==================================================
-// WORDPRESS API
+// API
 // ==================================================
 
 const API_URL =
   "/api/berita";
 
-
 // ==================================================
 // CLEAN HTML
 // ==================================================
 
-function cleanText(value: string): string {
+function cleanText(
+  value: string
+): string {
 
   if (!value) {
     return "";
@@ -69,7 +94,7 @@ function cleanText(value: string): string {
 
   return value
     .replace(/<[^>]*>/g, "")
-    .replace(/&nbsp;/g, " ")
+    .replace(/&nbsp;/gi, " ")
     .replace(/&#8217;/g, "'")
     .replace(/&#8216;/g, "'")
     .replace(/&#8220;/g, '"')
@@ -77,10 +102,11 @@ function cleanText(value: string): string {
     .replace(/&#038;/g, "&")
     .replace(/&amp;/g, "&")
     .replace(/&#8230;/g, "...")
+    .replace(/&#8211;/g, "–")
+    .replace(/&#8212;/g, "—")
+    .replace(/\s+/g, " ")
     .trim();
-
 }
-
 
 // ==================================================
 // FORMAT DATE
@@ -105,9 +131,7 @@ function formatDate(
       year: "numeric",
     }
   );
-
 }
-
 
 // ==================================================
 // GET IMAGE
@@ -124,15 +148,25 @@ function getImage(
       ?.source_url ||
     "/news-placeholder.jpg"
   );
-
 }
 
-
 // ==================================================
-// NEWS INDEX PAGE
+// SEARCH PAGE
 // ==================================================
 
-export default function NewsIndexPage() {
+function NewsSearchPage() {
+
+  const searchParams =
+    useSearchParams();
+
+  const search =
+    searchParams.get(
+      "search"
+    )?.trim() || "";
+
+  // ==================================================
+  // STATE
+  // ==================================================
 
   const [posts, setPosts] =
     useState<NewsPost[]>([]);
@@ -152,44 +186,81 @@ export default function NewsIndexPage() {
   const [error, setError] =
     useState(false);
 
-
   // ==================================================
   // LOAD INITIAL NEWS
   // ==================================================
 
   useEffect(() => {
 
+    let cancelled = false;
+
     async function loadInitialNews() {
 
       try {
 
         setLoading(true);
-
         setError(false);
+        setPosts([]);
+        setCurrentPage(1);
+        setHasMore(true);
 
-const response =
-  await fetch(
-    `${API_URL}?per_page=14&page=1`
-  );
+        const params =
+          new URLSearchParams();
+
+        params.set(
+          "per_page",
+          "14"
+        );
+
+        params.set(
+          "page",
+          "1"
+        );
+
+        if (search) {
+
+          params.set(
+            "search",
+            search
+          );
+
+        }
+
+        const response =
+          await fetch(
+            `${API_URL}?${params.toString()}`,
+            {
+              cache:
+                "no-store",
+            }
+          );
 
         if (!response.ok) {
+
           throw new Error(
             "Gagal mengambil berita"
           );
+
         }
 
         const data =
           await response.json();
 
-        if (!Array.isArray(data)) {
+        if (
+          !Array.isArray(data)
+        ) {
+
           throw new Error(
             "Format data berita tidak valid"
           );
+
+        }
+
+        if (cancelled) {
+          return;
         }
 
         setPosts(data);
-
-        setCurrentPage(1);
 
         const totalPages =
           Number(
@@ -204,6 +275,12 @@ const response =
 
       } catch (error) {
 
+        if (
+          cancelled
+        ) {
+          return;
+        }
+
         console.error(
           "NEWS ERROR:",
           error
@@ -213,17 +290,25 @@ const response =
 
       } finally {
 
-        setLoading(false);
+        if (
+          !cancelled
+        ) {
+
+          setLoading(false);
+
+        }
 
       }
 
     }
 
-
     loadInitialNews();
 
-  }, []);
+    return () => {
+      cancelled = true;
+    };
 
+  }, [search]);
 
   // ==================================================
   // LOAD MORE
@@ -245,10 +330,36 @@ const response =
       const nextPage =
         currentPage + 1;
 
-const response =
-  await fetch(
-    `${API_URL}?per_page=10&page=${nextPage}`
-  );
+      const params =
+        new URLSearchParams();
+
+      params.set(
+        "per_page",
+        "10"
+      );
+
+      params.set(
+        "page",
+        String(nextPage)
+      );
+
+      if (search) {
+
+        params.set(
+          "search",
+          search
+        );
+
+      }
+
+      const response =
+        await fetch(
+          `${API_URL}?${params.toString()}`,
+          {
+            cache:
+              "no-store",
+          }
+        );
 
       if (!response.ok) {
 
@@ -264,6 +375,7 @@ const response =
         throw new Error(
           "Gagal mengambil berita berikutnya"
         );
+
       }
 
       const data =
@@ -313,31 +425,25 @@ const response =
       setLoadingMore(false);
 
     }
-
   }
 
-
   // ==================================================
-  // LOADING SCREEN
+  // LOADING
   // ==================================================
 
   if (loading) {
 
     return (
-
       <main
         className="
-bg-[#F5F7FA]
+          min-h-screen
+          bg-[#F5F7FA]
           overflow-x-hidden
           text-[#0D2341]
-          origin-top-left
-          scale-[0.8]
-          w-[125%]
         "
       >
 
         <Navbar />
-
 
         <section
           className="
@@ -356,7 +462,7 @@ bg-[#F5F7FA]
             "
           >
 
-            {/* HEADER SKELETON */}
+            {/* HEADER */}
 
             <div
               className="
@@ -400,8 +506,7 @@ bg-[#F5F7FA]
 
             </div>
 
-
-            {/* HERO SKELETON */}
+            {/* HERO */}
 
             <div
               className="
@@ -415,7 +520,6 @@ bg-[#F5F7FA]
                 animate-pulse
               "
             />
-
 
             {/* THREE CARDS */}
 
@@ -432,7 +536,6 @@ bg-[#F5F7FA]
 
               {[1, 2, 3].map(
                 item => (
-
                   <div
                     key={item}
                     className="
@@ -442,7 +545,6 @@ bg-[#F5F7FA]
                       animate-pulse
                     "
                   />
-
                 )
               )}
 
@@ -452,25 +554,19 @@ bg-[#F5F7FA]
 
         </section>
 
-
         <Footer />
 
       </main>
     );
   }
 
-
   // ==================================================
-  // ERROR / EMPTY
+  // ERROR
   // ==================================================
 
-  if (
-    error ||
-    posts.length === 0
-  ) {
+  if (error) {
 
     return (
-
       <main
         className="
           min-h-screen
@@ -481,7 +577,6 @@ bg-[#F5F7FA]
       >
 
         <Navbar />
-
 
         <section
           className="
@@ -521,9 +616,8 @@ bg-[#F5F7FA]
                   mb-5
                 "
               >
-                📰
+                ⚠️
               </div>
-
 
               <h1
                 className="
@@ -534,9 +628,8 @@ bg-[#F5F7FA]
                   text-[#0D2341]
                 "
               >
-                Berita belum tersedia
+                Gagal memuat berita
               </h1>
-
 
               <p
                 className="
@@ -544,14 +637,12 @@ bg-[#F5F7FA]
                   text-[#667085]
                 "
               >
-                Belum ada berita yang
-                diterbitkan melalui
-                WordPress CMS.
+                Terjadi masalah saat
+                mengambil data berita.
               </p>
 
-
               <Link
-                href="/"
+                href="/berita"
                 className="
                   inline-flex
                   items-center
@@ -572,7 +663,7 @@ bg-[#F5F7FA]
                   size={18}
                 />
 
-                Kembali ke Beranda
+                Muat Ulang Berita
 
               </Link>
 
@@ -582,13 +673,204 @@ bg-[#F5F7FA]
 
         </section>
 
-
         <Footer />
 
       </main>
     );
   }
 
+  // ==================================================
+  // EMPTY / SEARCH NOT FOUND
+  // ==================================================
+
+  if (
+    posts.length === 0
+  ) {
+
+    return (
+      <main
+        className="
+          min-h-screen
+          bg-[#F5F7FA]
+          overflow-x-hidden
+          text-[#0D2341]
+        "
+      >
+
+        <Navbar />
+
+        <section
+          className="
+            pt-28
+            lg:pt-32
+            pb-24
+          "
+        >
+
+          <div
+            className="
+              max-w-6xl
+              mx-auto
+              px-4
+              sm:px-6
+            "
+          >
+
+            <div
+              className="
+                max-w-4xl
+                mx-auto
+              "
+            >
+
+              <p
+                className="
+                  uppercase
+                  tracking-[0.25em]
+                  text-[#7A8599]
+                  font-medium
+                  text-sm
+                "
+              >
+                Pencarian
+              </p>
+
+              <h1
+                className="
+                  font-serif
+                  text-[38px]
+                  sm:text-[48px]
+                  lg:text-[56px]
+                  leading-tight
+                  font-bold
+                  text-[#0D2341]
+                  mt-4
+                "
+              >
+                Hasil Pencarian
+              </h1>
+
+              <div
+                className="
+                  mt-6
+                  bg-white
+                  rounded-2xl
+                  border
+                  border-[#E8EDF3]
+                  px-5
+                  py-4
+                  flex
+                  items-center
+                  gap-3
+                  text-[#344054]
+                "
+              >
+
+                <Search
+                  size={19}
+                  className="
+                    text-[#7A8599]
+                    shrink-0
+                  "
+                />
+
+                <span>
+                  {search}
+                </span>
+
+              </div>
+
+              <div
+                className="
+                  mt-8
+                  bg-white
+                  rounded-[28px]
+                  border
+                  border-[#E8EDF3]
+                  shadow-[0_10px_40px_rgba(0,0,0,0.05)]
+                  p-10
+                  lg:p-14
+                  text-center
+                "
+              >
+
+                <div
+                  className="
+                    text-5xl
+                    mb-5
+                  "
+                >
+                  🔎
+                </div>
+
+                <h2
+                  className="
+                    font-serif
+                    text-3xl
+                    lg:text-4xl
+                    font-bold
+                    text-[#0D2341]
+                  "
+                >
+                  Berita tidak ditemukan
+                </h2>
+
+                <p
+                  className="
+                    mt-3
+                    text-[#667085]
+                    max-w-xl
+                    mx-auto
+                    leading-relaxed
+                  "
+                >
+                  Tidak ditemukan berita
+                  yang sesuai dengan
+                  pencarian{" "}
+                  <strong>
+                    "{search}"
+                  </strong>.
+                </p>
+
+                <Link
+                  href="/berita"
+                  className="
+                    inline-flex
+                    items-center
+                    gap-2
+                    mt-8
+                    bg-[#123A63]
+                    hover:bg-[#0F3153]
+                    text-white
+                    px-6
+                    py-3
+                    rounded-2xl
+                    font-semibold
+                    transition
+                  "
+                >
+
+                  <X
+                    size={18}
+                  />
+
+                  Hapus Pencarian
+
+                </Link>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </section>
+
+        <Footer />
+
+      </main>
+    );
+  }
 
   // ==================================================
   // SPLIT NEWS
@@ -603,13 +885,11 @@ bg-[#F5F7FA]
   const listNews =
     posts.slice(4);
 
-
   // ==================================================
   // MAIN PAGE
   // ==================================================
 
   return (
-
     <main
       className="
         min-h-screen
@@ -619,16 +899,7 @@ bg-[#F5F7FA]
       "
     >
 
-      {/* ==================================================
-          NAVBAR
-      ================================================== */}
-
       <Navbar />
-
-
-      {/* ==================================================
-          PAGE CONTENT
-      ================================================== */}
 
       <section
         className="
@@ -646,7 +917,6 @@ bg-[#F5F7FA]
             sm:px-6
           "
         >
-
 
           {/* ==================================================
               PAGE HEADER
@@ -670,9 +940,10 @@ bg-[#F5F7FA]
                 text-sm
               "
             >
-              Informasi
+              {search
+                ? "Pencarian Berita"
+                : "Informasi"}
             </p>
-
 
             <h1
               className="
@@ -686,27 +957,100 @@ bg-[#F5F7FA]
                 mt-4
               "
             >
-              Berita Masjid
+              {search
+                ? "Hasil Pencarian"
+                : "Berita Masjid"}
             </h1>
 
+            {search ? (
 
-            <p
-              className="
-                text-[#667085]
-                text-lg
-                mt-4
-                max-w-2xl
-                leading-relaxed
-              "
-            >
-              Informasi terbaru seputar
-              kegiatan, pelayanan, dakwah,
-              dan aktivitas Masjid Raya
-              Al-Jabbar.
-            </p>
+              <div
+                className="
+                  mt-5
+                  flex
+                  flex-wrap
+                  items-center
+                  gap-3
+                "
+              >
+
+                <div
+                  className="
+                    inline-flex
+                    items-center
+                    gap-3
+                    bg-white
+                    border
+                    border-[#E8EDF3]
+                    rounded-2xl
+                    px-5
+                    py-3
+                    text-[#344054]
+                    shadow-sm
+                  "
+                >
+
+                  <Search
+                    size={18}
+                    className="
+                      text-[#7A8599]
+                    "
+                  />
+
+                  <span
+                    className="
+                      font-medium
+                    "
+                  >
+                    {search}
+                  </span>
+
+                </div>
+
+                <Link
+                  href="/berita"
+                  className="
+                    inline-flex
+                    items-center
+                    gap-2
+                    text-sm
+                    font-semibold
+                    text-[#123A63]
+                    hover:text-[#A17B35]
+                    transition
+                  "
+                >
+
+                  <X
+                    size={17}
+                  />
+
+                  Hapus pencarian
+
+                </Link>
+
+              </div>
+
+            ) : (
+
+              <p
+                className="
+                  text-[#667085]
+                  text-lg
+                  mt-4
+                  max-w-2xl
+                  leading-relaxed
+                "
+              >
+                Informasi terbaru seputar
+                kegiatan, pelayanan, dakwah,
+                dan aktivitas Masjid Raya
+                Al-Jabbar.
+              </p>
+
+            )}
 
           </div>
-
 
           {/* ==================================================
               HEADLINE
@@ -735,7 +1079,9 @@ bg-[#F5F7FA]
             >
 
               <img
-                src={getImage(headline)}
+                src={getImage(
+                  headline
+                )}
                 alt={
                   headline._embedded
                     ?.["wp:featuredmedia"]
@@ -757,9 +1103,6 @@ bg-[#F5F7FA]
                 "
               />
 
-
-              {/* OVERLAY */}
-
               <div
                 className="
                   absolute
@@ -770,9 +1113,6 @@ bg-[#F5F7FA]
                   to-black/5
                 "
               />
-
-
-              {/* CONTENT */}
 
               <div
                 className="
@@ -800,7 +1140,9 @@ bg-[#F5F7FA]
                 >
 
                   <span>
-                    Berita Utama
+                    {search
+                      ? "Hasil Pencarian"
+                      : "Berita Utama"}
                   </span>
 
                   <span>
@@ -814,7 +1156,6 @@ bg-[#F5F7FA]
                   </span>
 
                 </div>
-
 
                 <h2
                   className="
@@ -833,7 +1174,6 @@ bg-[#F5F7FA]
                   )}
                 </h2>
 
-
                 <p
                   className="
                     mt-5
@@ -849,7 +1189,6 @@ bg-[#F5F7FA]
                     headline.excerpt.rendered
                   )}
                 </p>
-
 
                 <div
                   className="
@@ -878,7 +1217,6 @@ bg-[#F5F7FA]
             </article>
 
           </Link>
-
 
           {/* ==================================================
               3 BERITA KECIL
@@ -925,8 +1263,6 @@ bg-[#F5F7FA]
                       "
                     >
 
-                      {/* FOTO */}
-
                       <div
                         className="
                           relative
@@ -937,7 +1273,9 @@ bg-[#F5F7FA]
                       >
 
                         <img
-                          src={getImage(post)}
+                          src={getImage(
+                            post
+                          )}
                           alt={
                             post._embedded
                               ?.["wp:featuredmedia"]
@@ -958,9 +1296,6 @@ bg-[#F5F7FA]
                         />
 
                       </div>
-
-
-                      {/* TEXT */}
 
                       <div
                         className="
@@ -988,7 +1323,6 @@ bg-[#F5F7FA]
 
                         </div>
 
-
                         <h3
                           className="
                             font-serif
@@ -1006,7 +1340,6 @@ bg-[#F5F7FA]
                           )}
                         </h3>
 
-
                         <p
                           className="
                             mt-4
@@ -1020,7 +1353,6 @@ bg-[#F5F7FA]
                             post.excerpt.rendered
                           )}
                         </p>
-
 
                         <div
                           className="
@@ -1059,9 +1391,8 @@ bg-[#F5F7FA]
 
           )}
 
-
           {/* ==================================================
-              DAFTAR 10 BERITA
+              DAFTAR BERITA
           ================================================== */}
 
           {listNews.length > 0 && (
@@ -1073,8 +1404,6 @@ bg-[#F5F7FA]
                 mt-20
               "
             >
-
-              {/* HEADER */}
 
               <div
                 className="
@@ -1091,9 +1420,10 @@ bg-[#F5F7FA]
                     text-sm
                   "
                 >
-                  Berita Terbaru
+                  {search
+                    ? "Hasil Lainnya"
+                    : "Berita Terbaru"}
                 </p>
-
 
                 <h2
                   className="
@@ -1106,13 +1436,12 @@ bg-[#F5F7FA]
                     text-[#0D2341]
                   "
                 >
-                  Berita Lainnya
+                  {search
+                    ? "Berita Ditemukan"
+                    : "Berita Lainnya"}
                 </h2>
 
               </div>
-
-
-              {/* NEWS LIST */}
 
               <div
                 className="
@@ -1167,7 +1496,9 @@ bg-[#F5F7FA]
                         >
 
                           <img
-                            src={getImage(post)}
+                            src={getImage(
+                              post
+                            )}
                             alt={
                               post._embedded
                                 ?.["wp:featuredmedia"]
@@ -1189,7 +1520,6 @@ bg-[#F5F7FA]
 
                         </div>
 
-
                         {/* CONTENT */}
 
                         <div
@@ -1199,8 +1529,6 @@ bg-[#F5F7FA]
                             py-1
                           "
                         >
-
-                          {/* DATE */}
 
                           <div
                             className="
@@ -1224,9 +1552,6 @@ bg-[#F5F7FA]
 
                           </div>
 
-
-                          {/* TITLE */}
-
                           <h3
                             className="
                               font-serif
@@ -1241,15 +1566,10 @@ bg-[#F5F7FA]
                               transition-colors
                             "
                           >
-
                             {cleanText(
                               post.title.rendered
                             )}
-
                           </h3>
-
-
-                          {/* EXCERPT */}
 
                           <p
                             className="
@@ -1261,15 +1581,10 @@ bg-[#F5F7FA]
                               line-clamp-2
                             "
                           >
-
                             {cleanText(
                               post.excerpt.rendered
                             )}
-
                           </p>
-
-
-                          {/* READ MORE */}
 
                           <div
                             className="
@@ -1307,7 +1622,6 @@ bg-[#F5F7FA]
 
               </div>
 
-
               {/* ==================================================
                   LOAD MORE
               ================================================== */}
@@ -1324,8 +1638,12 @@ bg-[#F5F7FA]
 
                   <button
                     type="button"
-                    onClick={loadMoreNews}
-                    disabled={loadingMore}
+                    onClick={
+                      loadMoreNews
+                    }
+                    disabled={
+                      loadingMore
+                    }
                     className="
                       inline-flex
                       items-center
@@ -1368,7 +1686,6 @@ bg-[#F5F7FA]
                         <ArrowRight
                           size={18}
                         />
-
                       </>
 
                     )}
@@ -1378,7 +1695,6 @@ bg-[#F5F7FA]
                 </div>
 
               )}
-
 
               {/* END */}
 
@@ -1392,8 +1708,9 @@ bg-[#F5F7FA]
                     text-[#8A95A7]
                   "
                 >
-                  Semua berita sudah
-                  ditampilkan.
+                  {search
+                    ? "Semua hasil pencarian sudah ditampilkan."
+                    : "Semua berita sudah ditampilkan."}
                 </div>
 
               )}
@@ -1406,13 +1723,55 @@ bg-[#F5F7FA]
 
       </section>
 
-
-      {/* ==================================================
-          FOOTER
-      ================================================== */}
-
       <Footer />
 
     </main>
+  );
+}
+
+// ==================================================
+// PAGE WRAPPER
+// ==================================================
+//
+// useSearchParams() membutuhkan Suspense
+// pada production build Next.js.
+//
+
+export default function NewsIndexPage() {
+
+  return (
+    <Suspense
+      fallback={
+        <main
+          className="
+            min-h-screen
+            bg-[#F5F7FA]
+          "
+        >
+          <Navbar />
+
+          <div
+            className="
+              pt-32
+              pb-24
+              flex
+              justify-center
+            "
+          >
+            <Loader2
+              size={28}
+              className="
+                animate-spin
+                text-[#123A63]
+              "
+            />
+          </div>
+
+          <Footer />
+        </main>
+      }
+    >
+      <NewsSearchPage />
+    </Suspense>
   );
 }
