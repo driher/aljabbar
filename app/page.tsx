@@ -56,7 +56,15 @@ export default function HomePage() {
         {/* ==================================================
             FLOATING INFO SECTION
         ================================================== */}
-        <section className="-mt-32 relative z-20">
+        <section
+  className="
+    relative
+    z-20
+    -mt-8
+    sm:-mt-16
+    lg:-mt-32
+  "
+>
 
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
 
@@ -450,127 +458,7 @@ export default function HomePage() {
         </section>
 
 
-        {/* ==================================================
-            CTA SECTION
-        ================================================== */}
-        <section className="pb-24">
-
-          <div className="max-w-6xl mx-auto px-4 sm:px-6">
-
-            <div
-              className="
-                relative
-                overflow-hidden
-                rounded-[36px]
-                bg-[#123A63]
-                px-8
-                lg:px-12
-                py-14
-                lg:py-16
-                text-white
-              "
-            >
-
-              {/* BACKGROUND EFFECT */}
-              <div
-                className="
-                  absolute
-                  right-0
-                  top-0
-                  w-[500px]
-                  h-[500px]
-                  rounded-full
-                  bg-white/5
-                  blur-3xl
-                "
-              />
-
-
-              <div className="relative z-10 max-w-3xl">
-
-                <p
-                  className="
-                    uppercase
-                    tracking-[0.25em]
-                    text-white/70
-                    text-sm
-                  "
-                >
-                  Donasi
-                </p>
-
-
-                <h2
-                  className="
-                    font-serif
-                    text-[42px]
-                    lg:text-[56px]
-                    leading-tight
-                    font-bold
-                    mt-6
-                  "
-                >
-                  Bersama Memakmurkan
-                  <br />
-                  Masjid
-                </h2>
-
-
-                <p
-                  className="
-                    mt-6
-                    text-white/80
-                    text-lg
-                    leading-relaxed
-                    max-w-2xl
-                  "
-                >
-                  Dukungan Anda membantu kegiatan dakwah,
-                  pendidikan, sosial, dan pengembangan
-                  fasilitas Masjid Raya Al-Jabbar.
-                </p>
-
-
-                <div className="flex flex-wrap gap-4 mt-10">
-
-                  <button
-                    className="
-                      bg-white
-                      text-[#123A63]
-                      px-7
-                      py-4
-                      rounded-2xl
-                      font-semibold
-                    "
-                  >
-                    Donasi Sekarang
-                  </button>
-
-
-                  <button
-                    className="
-                      border
-                      border-white/30
-                      px-7
-                      py-4
-                      rounded-2xl
-                      font-semibold
-                    "
-                  >
-                    Pelajari Program
-                  </button>
-
-                </div>
-
-              </div>
-
-            </div>
-
-          </div>
-
-        </section>
-
-     {/* ==================================================
+           {/* ==================================================
             ABOUT SECTION
         ================================================== */}
         <section className="pt-24 pb-24">

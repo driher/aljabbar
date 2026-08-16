@@ -835,34 +835,32 @@ export default function Navbar() {
                 INFAQ DESKTOP
             =================================== */}
 
-            <button
-              type="button"
-              className="
-                hidden
-                lg:flex
-                items-center
-                gap-2
-                bg-[#123A63]
-                hover:bg-[#0F3153]
-                text-white
-                px-4
-                py-2.5
-                rounded-xl
-                text-[14px]
-                font-semibold
-                shadow-md
-                transition
-              "
-            >
+            <Link
+  href="/infaq"
+  className="
+    hidden
+    lg:flex
+    items-center
+    gap-2
+    bg-[#123A63]
+    hover:bg-[#0F3153]
+    text-white
+    px-4
+    py-2.5
+    rounded-xl
+    text-[14px]
+    font-semibold
+    shadow-md
+    transition
+  "
+>
+  <Heart
+    size={17}
+    fill="currentColor"
+  />
 
-              <Heart
-                size={17}
-                fill="currentColor"
-              />
-
-              Infaq/Shadaqah
-
-            </button>
+  Infaq/Shadaqah
+</Link>
 
             {/* ==================================
                 MOBILE MENU BUTTON
@@ -1171,36 +1169,34 @@ export default function Navbar() {
                 "
               >
 
-                <button
-                  type="button"
-                  className="
-                    w-full
-                    flex
-                    items-center
-                    justify-center
-                    gap-2
-                    bg-[#123A63]
-                    hover:bg-[#0F3153]
-                    text-white
-                    px-5
-                    py-3
-                    rounded-xl
-                    text-[14px]
-                    font-semibold
-                    shadow-md
-                    transition
-                  "
-                >
+<Link
+  href="/infaq"
+  onClick={closeMobile}
+  className="
+    w-full
+    flex
+    items-center
+    justify-center
+    gap-2
+    bg-[#123A63]
+    hover:bg-[#0F3153]
+    text-white
+    px-5
+    py-3
+    rounded-xl
+    text-[14px]
+    font-semibold
+    shadow-md
+    transition
+  "
+>
+  <Heart
+    size={17}
+    fill="currentColor"
+  />
 
-                  <Heart
-                    size={17}
-                    fill="currentColor"
-                  />
-
-                  Infaq / Shadaqah
-
-                </button>
-
+  Infaq / Shadaqah
+</Link>
               </div>
 
             </div>
