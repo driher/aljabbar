@@ -327,10 +327,12 @@ const response =
 
       <main
         className="
-  min-h-screen
-  bg-[#F5F7FA]
-  overflow-x-hidden
-  text-[#0D2341]
+bg-[#F5F7FA]
+          overflow-x-hidden
+          text-[#0D2341]
+          origin-top-left
+          scale-[0.8]
+          w-[125%]
         "
       >
 

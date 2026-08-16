@@ -2,11 +2,12 @@
 // components/VideoCard.tsx
 // 3 VIDEO TERBARU - YOUTUBE
 // POPUP PLAYER
+// AUTO FOCUS KE VIDEO PLAYER
 // ============================================
 
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Play, X } from "lucide-react";
 
 interface YouTubeVideo {
@@ -17,84 +18,62 @@ interface YouTubeVideo {
 }
 
 export default function VideoCard() {
-
-  const [videos, setVideos] =
-    useState<YouTubeVideo[]>([]);
-
-  const [loading, setLoading] =
-    useState(true);
-
+  const [videos, setVideos] = useState<YouTubeVideo[]>([]);
+  const [loading, setLoading] = useState(true);
   const [selectedVideo, setSelectedVideo] =
     useState<YouTubeVideo | null>(null);
 
+  // ==========================================
+  // REF VIDEO PLAYER
+  // ==========================================
+
+  const videoPlayerRef = useRef<HTMLDivElement | null>(null);
 
   // ==========================================
   // FETCH INTERNAL API
   // ==========================================
 
   useEffect(() => {
-
     async function loadVideos() {
-
       try {
-
-        const response =
-          await fetch("/api/youtube", {
-            cache: "no-store",
-          });
+        const response = await fetch("/api/youtube", {
+          cache: "no-store",
+        });
 
         if (!response.ok) {
-          throw new Error(
-            `HTTP ${response.status}`
-          );
+          throw new Error(`HTTP ${response.status}`);
         }
 
-        const result =
-          await response.json();
+        const result = await response.json();
 
         if (
           result.success &&
           Array.isArray(result.videos)
         ) {
-
-          setVideos(
-            result.videos.slice(0, 3)
-          );
-
+          setVideos(result.videos.slice(0, 3));
         } else {
-
           setVideos([]);
-
         }
-
       } catch (error) {
-
         console.error(
           "Gagal mengambil video:",
           error
         );
 
         setVideos([]);
-
       } finally {
-
         setLoading(false);
-
       }
-
     }
 
     loadVideos();
-
   }, []);
-
 
   // ==========================================
   // FORMAT DATE
   // ==========================================
 
   function formatDate(date: string) {
-
     if (!date) return "";
 
     return new Date(date).toLocaleDateString(
@@ -105,35 +84,35 @@ export default function VideoCard() {
         year: "numeric",
       }
     );
-
   }
 
+  // ==========================================
+  // OPEN VIDEO
+  // ==========================================
+
+  function openVideo(video: YouTubeVideo) {
+    setSelectedVideo(video);
+  }
 
   // ==========================================
   // CLOSE MODAL
   // ==========================================
 
   function closeVideo() {
-
     setSelectedVideo(null);
-
   }
-
 
   // ==========================================
   // ESC
   // ==========================================
 
   useEffect(() => {
-
     function handleKeyDown(
       event: KeyboardEvent
     ) {
-
       if (event.key === "Escape") {
         closeVideo();
       }
-
     }
 
     window.addEventListener(
@@ -142,53 +121,59 @@ export default function VideoCard() {
     );
 
     return () => {
-
       window.removeEventListener(
         "keydown",
         handleKeyDown
       );
-
     };
-
   }, []);
-
 
   // ==========================================
   // LOCK SCROLL
   // ==========================================
 
   useEffect(() => {
-
     if (selectedVideo) {
-
-      document.body.style.overflow =
-        "hidden";
-
+      document.body.style.overflow = "hidden";
     } else {
-
-      document.body.style.overflow =
-        "";
-
+      document.body.style.overflow = "";
     }
 
     return () => {
-
-      document.body.style.overflow =
-        "";
-
+      document.body.style.overflow = "";
     };
-
   }, [selectedVideo]);
 
+  // ==========================================
+  // AUTO FOCUS VIDEO PLAYER
+  // ==========================================
+
+  useEffect(() => {
+    if (!selectedVideo) return;
+
+    // Beri waktu popup selesai dirender
+    // sebelum melakukan scroll/focus.
+    const timer = window.setTimeout(() => {
+      if (videoPlayerRef.current) {
+        videoPlayerRef.current.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+          inline: "center",
+        });
+      }
+    }, 100);
+
+    return () => {
+      window.clearTimeout(timer);
+    };
+  }, [selectedVideo]);
 
   // ==========================================
   // LOADING
   // ==========================================
 
   if (loading) {
-
     return (
-
       <div
         className="
           grid
@@ -197,9 +182,7 @@ export default function VideoCard() {
           gap-6
         "
       >
-
         {[1, 2, 3].map((item) => (
-
           <div
             key={item}
             className="
@@ -211,7 +194,6 @@ export default function VideoCard() {
               animate-pulse
             "
           >
-
             <div
               className="
                 aspect-video
@@ -220,7 +202,6 @@ export default function VideoCard() {
             />
 
             <div className="p-6">
-
               <div
                 className="
                   h-3
@@ -249,28 +230,19 @@ export default function VideoCard() {
                   rounded
                 "
               />
-
             </div>
-
           </div>
-
         ))}
-
       </div>
-
     );
-
   }
-
 
   // ==========================================
   // EMPTY
   // ==========================================
 
   if (videos.length === 0) {
-
     return (
-
       <div
         className="
           rounded-3xl
@@ -281,7 +253,6 @@ export default function VideoCard() {
           text-center
         "
       >
-
         <div className="text-4xl mb-4">
           🎬
         </div>
@@ -306,13 +277,9 @@ export default function VideoCard() {
           Video terbaru akan tampil
           otomatis di sini.
         </p>
-
       </div>
-
     );
-
   }
-
 
   // ==========================================
   // VIDEO GRID
@@ -328,9 +295,7 @@ export default function VideoCard() {
           gap-6
         "
       >
-
         {videos.map((video) => (
-
           <article
             key={video.id}
             className="
@@ -347,21 +312,19 @@ export default function VideoCard() {
               duration-300
             "
           >
-
-            {/* THUMBNAIL */}
+            {/* =====================================
+                THUMBNAIL
+            ====================================== */}
 
             <button
               type="button"
-              onClick={() =>
-                setSelectedVideo(video)
-              }
+              onClick={() => openVideo(video)}
               className="
                 block
                 w-full
                 text-left
               "
             >
-
               <div
                 className="
                   relative
@@ -370,7 +333,6 @@ export default function VideoCard() {
                   bg-[#E9EDF3]
                 "
               >
-
                 <img
                   src={`https://i.ytimg.com/vi/${video.id}/hqdefault.jpg`}
                   alt={video.title}
@@ -383,6 +345,8 @@ export default function VideoCard() {
                     group-hover:scale-105
                   "
                 />
+
+                {/* OVERLAY */}
 
                 <div
                   className="
@@ -405,7 +369,6 @@ export default function VideoCard() {
                     justify-center
                   "
                 >
-
                   <div
                     className="
                       w-16
@@ -421,7 +384,6 @@ export default function VideoCard() {
                       group-hover:scale-110
                     "
                   >
-
                     <Play
                       size={27}
                       fill="currentColor"
@@ -430,11 +392,8 @@ export default function VideoCard() {
                         text-[#C62828]
                       "
                     />
-
                   </div>
-
                 </div>
-
 
                 {/* LABEL */}
 
@@ -456,16 +415,14 @@ export default function VideoCard() {
                 >
                   YouTube
                 </div>
-
               </div>
-
             </button>
 
-
-            {/* CONTENT */}
+            {/* =====================================
+                CONTENT
+            ====================================== */}
 
             <div className="p-6">
-
               <p
                 className="
                   text-xs
@@ -478,18 +435,16 @@ export default function VideoCard() {
                 {formatDate(video.published)}
               </p>
 
+              {/* TITLE */}
 
               <button
                 type="button"
-                onClick={() =>
-                  setSelectedVideo(video)
-                }
+                onClick={() => openVideo(video)}
                 className="
                   text-left
                   w-full
                 "
               >
-
                 <h3
                   className="
                     font-serif
@@ -505,15 +460,13 @@ export default function VideoCard() {
                 >
                   {video.title}
                 </h3>
-
               </button>
 
+              {/* WATCH BUTTON */}
 
               <button
                 type="button"
-                onClick={() =>
-                  setSelectedVideo(video)
-                }
+                onClick={() => openVideo(video)}
                 className="
                   inline-flex
                   items-center
@@ -526,7 +479,6 @@ export default function VideoCard() {
                   transition-colors
                 "
               >
-
                 Tonton video
 
                 <span
@@ -538,149 +490,157 @@ export default function VideoCard() {
                 >
                   →
                 </span>
-
               </button>
-
             </div>
-
           </article>
-
         ))}
-
       </div>
 
+      {/* ========================================
+          POPUP VIDEO
+      ======================================== */}
 
-{/* ========================================
-    POPUP VIDEO
-======================================== */}
-
-{selectedVideo && (
-  <div
-    className="
-      fixed
-      inset-0
-      z-[9999]
-      bg-black/85
-      backdrop-blur-md
-      flex
-      items-center
-      justify-center
-      p-4
-      sm:p-6
-    "
-    onClick={closeVideo}
-  >
-
-    {/* PLAYER WRAPPER */}
-    <div
-      className="
-        relative
-        w-full
-        max-w-6xl
-      "
-      onClick={(event) =>
-        event.stopPropagation()
-      }
-    >
-
-      {/* VIDEO */}
-<div
-  className="
-    relative
-    top-[-60px]
-    w-full
-    max-w-6xl
-    aspect-video
-    overflow-hidden
-    rounded-2xl
-    lg:rounded-3xl
-    bg-black
-    shadow-[0_25px_80px_rgba(0,0,0,0.55)]
-  "
->
-
-        <iframe
-          key={selectedVideo.id}
-          src={`https://www.youtube.com/embed/${selectedVideo.id}?autoplay=1&rel=0`}
-          title={selectedVideo.title}
+      {selectedVideo && (
+        <div
           className="
-            absolute
+            fixed
             inset-0
-            w-full
-            h-full
-            border-0
-          "
-          allow="
-            accelerometer;
-            autoplay;
-            clipboard-write;
-            encrypted-media;
-            gyroscope;
-            picture-in-picture;
-            web-share
-          "
-          allowFullScreen
-        />
-
-        {/* CLOSE */}
-        <button
-          type="button"
-          onClick={closeVideo}
-          aria-label="Tutup video"
-          className="
-            absolute
-            top-4
-            right-4
-            z-20
-            w-11
-            h-11
-            rounded-full
-            bg-black/60
-            hover:bg-black/80
-            text-white
+            z-[9999]
+            bg-black/85
+            backdrop-blur-md
             flex
             items-center
             justify-center
-            transition
+            p-4
+            sm:p-6
+            overflow-y-auto
           "
+          onClick={closeVideo}
         >
-          <X size={24} />
-        </button>
+          {/* =====================================
+              PLAYER WRAPPER
+          ====================================== */}
 
-      </div>
+          <div
+            className="
+              relative
+              w-full
+              max-w-6xl
+              my-auto
+            "
+            onClick={(event) =>
+              event.stopPropagation()
+            }
+          >
+            {/* =================================
+                VIDEO PLAYER
+            ================================== */}
 
-      {/* TITLE */}
-      <div className="mt-4 text-white">
+            <div
+              ref={videoPlayerRef}
+              tabIndex={-1}
+              className="
+                relative
+                w-full
+                max-w-6xl
+                aspect-video
+                overflow-hidden
+                rounded-2xl
+                lg:rounded-3xl
+                bg-black
+                shadow-[0_25px_80px_rgba(0,0,0,0.55)]
+                outline-none
+              "
+            >
+              <iframe
+                key={selectedVideo.id}
+                src={`https://www.youtube.com/embed/${selectedVideo.id}?autoplay=1&rel=0`}
+                title={selectedVideo.title}
+                className="
+                  absolute
+                  inset-0
+                  w-full
+                  h-full
+                  border-0
+                "
+                allow="
+                  accelerometer;
+                  autoplay;
+                  clipboard-write;
+                  encrypted-media;
+                  gyroscope;
+                  picture-in-picture;
+                  web-share
+                "
+                allowFullScreen
+              />
 
-        <p
-          className="
-            text-xs
-            uppercase
-            tracking-[0.18em]
-            text-white/60
-          "
-        >
-          Video Terbaru
-        </p>
+              {/* =================================
+                  CLOSE BUTTON
+              ================================== */}
 
-        <h3
-          className="
-            font-serif
-            text-xl
-            sm:text-2xl
-            font-bold
-            mt-1
-          "
-        >
-          {selectedVideo.title}
-        </h3>
+              <button
+                type="button"
+                onClick={closeVideo}
+                aria-label="Tutup video"
+                className="
+                  absolute
+                  top-3
+                  right-3
+                  sm:top-4
+                  sm:right-4
+                  z-20
+                  w-10
+                  h-10
+                  sm:w-11
+                  sm:h-11
+                  rounded-full
+                  bg-black/60
+                  hover:bg-black/80
+                  text-white
+                  flex
+                  items-center
+                  justify-center
+                  transition
+                  backdrop-blur-sm
+                "
+              >
+                <X size={24} />
+              </button>
+            </div>
 
-      </div>
+            {/* =================================
+                TITLE
+            ================================== */}
 
-    </div>
+            <div className="mt-4 text-white pb-2">
+              <p
+                className="
+                  text-xs
+                  uppercase
+                  tracking-[0.18em]
+                  text-white/60
+                "
+              >
+                Video Terbaru
+              </p>
 
-  </div>
-)}
+              <h3
+                className="
+                  font-serif
+                  text-xl
+                  sm:text-2xl
+                  font-bold
+                  mt-1
+                  leading-tight
+                "
+              >
+                {selectedVideo.title}
+              </h3>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
