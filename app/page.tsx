@@ -12,6 +12,7 @@ import StatsCard from "@/components/StatsCard";
 import EventCard from "@/components/EventCard";
 import NewsCard from "@/components/NewsCard";
 import PrayerTimes from "@/components/PrayerTimes";
+import ActivityPermitCard from "@/components/ActivityPermitCard";
 import VideoCard from "@/components/VideoCard";
 
 import {
@@ -330,276 +331,109 @@ export default function HomePage() {
   </div>
 
 </section>
-              {/* ==================================================
-                  PRAYER + INFO CARDS
-              ================================================== */}
-              <div
-                className="
-                  grid
-                  grid-cols-1
-                  md:grid-cols-2
-                  xl:grid-cols-4
-                  gap-6
-                "
-              >
-
-                {/* PRAYER TIMES */}
-                <div className="xl:col-span-2">
-
-                  <PrayerTimes />
-
-                </div>
 
 
-                {/* INFO CARD */}
-                <InfoCard
-                  icon={<CalendarDays className="w-7 h-7" />}
-                  title="Jadwal Kegiatan"
-                  desc="Kajian dan kegiatan masjid"
-                />
+{/* ==================================================
+    PRAYER + INFO CARDS
+================================================== */}
+
+<div
+  className="
+    grid
+    grid-cols-1
+    md:grid-cols-2
+    gap-6
+  "
+>
+
+  {/* PRAYER TIMES */}
+
+  <div className="h-full">
+    <PrayerTimes />
+  </div>
 
 
-                {/* DONASI */}
-                <InfoCard
-                  icon={<Heart className="w-7 h-7" />}
-                  title="Donasi"
-                  desc="Bersama membangun umat"
-                />
+  {/* PERMOHONAN IZIN KEGIATAN */}
 
-              </div>
+  <div className="h-full">
+    <ActivityPermitCard />
+  </div>
 
-            </div>
+</div>
 
-          </div>
+</div>
 
-        </section>
+</div>
 
+</section>
 
-        {/* ==================================================
-            ABOUT SECTION
-        ================================================== */}
-        <section className="pt-24 pb-24">
+   
+{/* =========================
+    EVENT SECTION
+========================= */}
 
-          <div className="max-w-6xl mx-auto px-4 sm:px-6">
+<section className="pb-24">
 
-            <div className="grid lg:grid-cols-2 gap-10 lg:gap-14 items-start">
+  <div className="max-w-6xl mx-auto px-4 sm:px-6">
 
-              {/* LEFT */}
-              <div>
+    {/* HEADER */}
 
-                <p
-                  className="
-                    uppercase
-                    tracking-[0.25em]
-                    text-[#7A8599]
-                    font-medium
-                    text-sm
-                  "
-                >
-                  Tentang Kami
-                </p>
+    <div className="
+      flex
+      flex-col
+      lg:flex-row
+      lg:items-end
+      lg:justify-between
+      gap-6
+    ">
 
+      <div>
 
-                <h2
-                  className="
-                    font-serif
-                    text-[42px]
-                    lg:text-[56px]
-                    leading-tight
-                    font-bold
-                    text-[#0D2341]
-                    mt-5
-                  "
-                >
-                  Masjid Raya
-                  <br />
-                  Al-Jabbar
-                </h2>
+        <p className="
+          uppercase
+          tracking-[0.25em]
+          text-[#7A8599]
+          font-medium
+          text-sm
+        ">
+          Kegiatan
+        </p>
 
+        <h2 className="
+          font-serif
+          text-[40px]
+          lg:text-[52px]
+          leading-tight
+          font-bold
+          text-[#0D2341]
+          mt-5
+        ">
+          Agenda Kegiatan
+        </h2>
 
-                <p
-                  className="
-                    mt-8
-                    text-lg
-                    lg:text-xl
-                    leading-relaxed
-                    text-[#516176]
-                    max-w-xl
-                  "
-                >
-                  Masjid Raya Al-Jabbar merupakan simbol
-                  persatuan umat Islam modern dengan
-                  arsitektur megah yang terinspirasi
-                  dari nilai spiritual dan budaya Nusantara.
-                </p>
+      </div>
 
+      <button className="
+        flex
+        items-center
+        gap-2
+        text-[#123A63]
+        font-semibold
+      ">
+        Lihat Semua
+        <ArrowRight size={18} />
+      </button>
 
-                <button
-                  className="
-                    mt-10
-                    bg-[#123A63]
-                    hover:bg-[#0f3153]
-                    transition
-                    text-white
-                    px-7
-                    py-4
-                    rounded-2xl
-                    flex
-                    items-center
-                    gap-3
-                    shadow-lg
-                  "
-                >
-                  Selengkapnya
-
-                  <ArrowRight size={18} />
-
-                </button>
-
-              </div>
+    </div>
 
 
-              {/* RIGHT */}
-              <div className="grid sm:grid-cols-3 gap-5">
+    {/* AGENDA WORDPRESS */}
 
-                <StatsCard
-                  icon={<Users className="w-10 h-10" />}
-                  title="33K"
-                  desc="Kapasitas Jamaah"
-                />
+    <EventCard />
 
-                <StatsCard
-                  icon={<Building2 className="w-10 h-10" />}
-                  title="99K"
-                  desc="Luas Bangunan"
-                />
+  </div>
 
-                <StatsCard
-                  icon={<CalendarDays className="w-10 h-10" />}
-                  title="2022"
-                  desc="Peresmian"
-                />
-
-              </div>
-
-            </div>
-
-          </div>
-
-        </section>
-
-
-        {/* ==================================================
-            EVENT SECTION
-        ================================================== */}
-        <section className="pb-24">
-
-          <div className="max-w-6xl mx-auto px-4 sm:px-6">
-
-            {/* HEADER */}
-            <div
-              className="
-                flex
-                flex-col
-                lg:flex-row
-                lg:items-end
-                lg:justify-between
-                gap-6
-              "
-            >
-
-              <div>
-
-                <p
-                  className="
-                    uppercase
-                    tracking-[0.25em]
-                    text-[#7A8599]
-                    font-medium
-                    text-sm
-                  "
-                >
-                  Kegiatan
-                </p>
-
-
-                <h2
-                  className="
-                    font-serif
-                    text-[40px]
-                    lg:text-[52px]
-                    leading-tight
-                    font-bold
-                    text-[#0D2341]
-                    mt-5
-                  "
-                >
-                  Jadwal Kegiatan
-                </h2>
-
-              </div>
-
-
-              <button
-                className="
-                  flex
-                  items-center
-                  gap-2
-                  text-[#123A63]
-                  font-semibold
-                "
-              >
-                Lihat Semua
-
-                <ArrowRight size={18} />
-
-              </button>
-
-            </div>
-
-
-            {/* GRID */}
-            <div
-              className="
-                grid
-                md:grid-cols-2
-                xl:grid-cols-3
-                gap-6
-                mt-14
-              "
-            >
-
-              <EventCard
-                image="/kajian-1.jpg"
-                title="Kajian Subuh Bersama Ustadz Nasional"
-                date="25"
-                category="Kajian Rutin"
-                desc="Kajian terbuka untuk masyarakat umum setiap pekan."
-              />
-
-
-              <EventCard
-                image="/kajian-2.jpg"
-                title="Tabligh Akbar Akhir Pekan"
-                date="27"
-                category="Tabligh Akbar"
-                desc="Menghadirkan pembicara nasional dan internasional."
-              />
-
-
-              <EventCard
-                image="/kajian-3.jpg"
-                title="Kajian Muslimah & Parenting"
-                date="30"
-                category="Kajian Muslimah"
-                desc="Program edukasi keluarga Islami modern."
-              />
-
-            </div>
-
-          </div>
-
-        </section>
+</section>
 
 
         {/* ==================================================
@@ -848,7 +682,118 @@ export default function HomePage() {
 
         </section>
 
+     {/* ==================================================
+            ABOUT SECTION
+        ================================================== */}
+        <section className="pt-24 pb-24">
 
+          <div className="max-w-6xl mx-auto px-4 sm:px-6">
+
+            <div className="grid lg:grid-cols-2 gap-10 lg:gap-14 items-start">
+
+              {/* LEFT */}
+              <div>
+
+                <p
+                  className="
+                    uppercase
+                    tracking-[0.25em]
+                    text-[#7A8599]
+                    font-medium
+                    text-sm
+                  "
+                >
+                  Tentang Kami
+                </p>
+
+
+                <h2
+                  className="
+                    font-serif
+                    text-[42px]
+                    lg:text-[56px]
+                    leading-tight
+                    font-bold
+                    text-[#0D2341]
+                    mt-5
+                  "
+                >
+                  Masjid Raya
+                  <br />
+                  Al-Jabbar
+                </h2>
+
+
+                <p
+                  className="
+                    mt-8
+                    text-lg
+                    lg:text-xl
+                    leading-relaxed
+                    text-[#516176]
+                    max-w-xl
+                  "
+                >
+                  Masjid Raya Al-Jabbar merupakan simbol
+                  persatuan umat Islam modern dengan
+                  arsitektur megah yang terinspirasi
+                  dari nilai spiritual dan budaya Nusantara.
+                </p>
+
+
+                <button
+                  className="
+                    mt-10
+                    bg-[#123A63]
+                    hover:bg-[#0f3153]
+                    transition
+                    text-white
+                    px-7
+                    py-4
+                    rounded-2xl
+                    flex
+                    items-center
+                    gap-3
+                    shadow-lg
+                  "
+                >
+                  Selengkapnya
+
+                  <ArrowRight size={18} />
+
+                </button>
+
+              </div>
+
+
+              {/* RIGHT */}
+              <div className="grid sm:grid-cols-3 gap-5">
+
+                <StatsCard
+                  icon={<Users className="w-10 h-10" />}
+                  title="33K"
+                  desc="Kapasitas Jamaah"
+                />
+
+                <StatsCard
+                  icon={<Building2 className="w-10 h-10" />}
+                  title="99K"
+                  desc="Luas Bangunan"
+                />
+
+                <StatsCard
+                  icon={<CalendarDays className="w-10 h-10" />}
+                  title="2022"
+                  desc="Peresmian"
+                />
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </section>
         {/* ==================================================
             FOOTER
         ================================================== */}

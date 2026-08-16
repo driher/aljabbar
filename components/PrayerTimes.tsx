@@ -3,7 +3,10 @@
 import { useEffect, useMemo, useState } from "react";
 
 type PrayerData = {
+  imsak: string;
   subuh: string;
+  terbit: string;
+  dhuha: string;
   dzuhur: string;
   ashar: string;
   maghrib: string;
@@ -13,6 +16,7 @@ type PrayerData = {
 type PrayerItem = {
   name: string;
   time: string;
+  type: "info" | "prayer";
 };
 
 export default function PrayerTimes() {
@@ -20,11 +24,13 @@ export default function PrayerTimes() {
   const [loading, setLoading] = useState(true);
   const [timeNow, setTimeNow] = useState("");
 
-  useEffect(() => {
+  /* ======================================
+      AMBIL JADWAL
+  ====================================== */
 
+  useEffect(() => {
     const fetchPrayerTimes = async () => {
       try {
-
         const today = new Date();
 
         const year = today.getFullYear();
@@ -35,27 +41,31 @@ export default function PrayerTimes() {
 
         const res = await fetch(url);
 
+        if (!res.ok) {
+          throw new Error(`HTTP ${res.status}`);
+        }
+
         const json = await res.json();
 
         if (json?.data?.jadwal) {
           setJadwal(json.data.jadwal);
+        } else {
+          throw new Error("Data jadwal tidak ditemukan");
         }
-
       } catch (error) {
-
-        console.error(error);
-
+        console.error("Gagal mengambil jadwal salat:", error);
       } finally {
-
         setLoading(false);
-
       }
     };
 
     fetchPrayerTimes();
 
-    const timer = setInterval(() => {
+    /* ======================================
+        JAM REALTIME
+    ====================================== */
 
+    const updateClock = () => {
       const now = new Date();
 
       setTimeNow(
@@ -65,123 +75,271 @@ export default function PrayerTimes() {
           second: "2-digit",
         })
       );
+    };
 
-    }, 1000);
+    updateClock();
+
+    const timer = setInterval(updateClock, 1000);
 
     return () => clearInterval(timer);
-
   }, []);
 
-  const prayers: PrayerItem[] = useMemo(() => {
+  /* ======================================
+      SEMUA WAKTU
+  ====================================== */
 
+  const allTimes: PrayerItem[] = useMemo(() => {
     if (!jadwal) return [];
 
     return [
       {
+        name: "Imsak",
+        time: jadwal.imsak,
+        type: "info",
+      },
+      {
         name: "Subuh",
         time: jadwal.subuh,
+        type: "prayer",
+      },
+      {
+        name: "Terbit",
+        time: jadwal.terbit,
+        type: "info",
+      },
+      {
+        name: "Duha",
+        time: jadwal.dhuha,
+        type: "info",
       },
       {
         name: "Dzuhur",
         time: jadwal.dzuhur,
+        type: "prayer",
       },
       {
         name: "Ashar",
         time: jadwal.ashar,
+        type: "prayer",
       },
       {
         name: "Maghrib",
         time: jadwal.maghrib,
+        type: "prayer",
       },
       {
         name: "Isya",
         time: jadwal.isya,
+        type: "prayer",
       },
     ];
-
   }, [jadwal]);
 
-  const getNextPrayer = () => {
+  /* ======================================
+      HANYA 5 SALAT WAJIB
+  ====================================== */
+
+  const prayers = useMemo(() => {
+    return allTimes.filter(
+      (item) => item.type === "prayer"
+    );
+  }, [allTimes]);
+
+  /* ======================================
+      SALAT BERIKUTNYA
+  ====================================== */
+
+  const nextPrayer = useMemo(() => {
+    if (!prayers.length) return null;
 
     const now = new Date();
 
     for (const prayer of prayers) {
-
-      const [h, m] = prayer.time.split(":");
+      const [hour, minute] = prayer.time
+        .split(":")
+        .map(Number);
 
       const prayerTime = new Date();
 
-      prayerTime.setHours(Number(h));
-      prayerTime.setMinutes(Number(m));
-      prayerTime.setSeconds(0);
+      prayerTime.setHours(
+        hour,
+        minute,
+        0,
+        0
+      );
 
       if (prayerTime > now) {
         return prayer;
       }
     }
 
-    return prayers[0];
-  };
+    /*
+      Jika semua waktu salat hari ini sudah lewat,
+      tampilkan Subuh sebagai salat berikutnya
+      untuk siklus hari berikutnya.
+    */
 
-  const nextPrayer = getNextPrayer();
+    return prayers[0];
+  }, [prayers, timeNow]);
+
+  /* ======================================
+      LOADING
+  ====================================== */
 
   if (loading) {
     return (
       <div className="rounded-3xl bg-[#0D2341] p-5 text-white min-h-[220px] flex items-center justify-center">
-        Memuat jadwal...
+        <div className="text-white/70 text-sm">
+          Memuat jadwal salat...
+        </div>
       </div>
     );
   }
+
+  /* ======================================
+      ERROR
+  ====================================== */
 
   if (!jadwal || !nextPrayer) {
     return (
       <div className="rounded-3xl bg-[#0D2341] p-5 text-white min-h-[220px] flex items-center justify-center">
-        Gagal memuat jadwal
+        <div className="text-white/70 text-sm">
+          Gagal memuat jadwal salat
+        </div>
       </div>
     );
   }
 
+  /* ======================================
+      RENDER
+  ====================================== */
+
   return (
     <div className="rounded-3xl bg-[#0D2341] p-5 text-white h-full">
 
-      {/* HEADER */}
+      {/* ==================================
+          HEADER
+      ================================== */}
+
       <div className="flex items-start justify-between mb-5">
 
         <div>
-       <div>
-  <p className="uppercase tracking-[0.25em] text-white/50 text-[10px]">
-    Waktu Salat
-  </p>
+          <p className="uppercase tracking-[0.25em] text-white/50 text-[10px]">
+            Jadwal Salat
+          </p>
 
-  <h3 className="text-xl font-bold mt-1">
-    Bandung
-  </h3>
+          <h3 className="text-xl font-bold mt-1">
+            Bandung
+          </h3>
 
-  <p className="text-white/60 text-xs mt-1">
-    {new Date().toLocaleDateString("id-ID", {
-      weekday: "long",
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    })}
-  </p>
-</div>
+          <p className="text-white/60 text-xs mt-1">
+            {new Date().toLocaleDateString(
+              "id-ID",
+              {
+                weekday: "long",
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+              }
+            )}
+          </p>
         </div>
+
+        {/* JAM */}
 
         <div className="text-right">
           <p className="text-white/50 text-[10px]">
             Sekarang
           </p>
 
-          <h3 className="text-sm font-semibold mt-1">
+          <h3 className="text-sm font-semibold mt-1 tabular-nums">
             {timeNow}
           </h3>
         </div>
 
       </div>
 
-      {/* NEXT PRAYER */}
-      <div className="bg-white/10 border border-white/10 rounded-2xl p-4 mb-4">
+
+      {/* ==================================
+          INFORMASI PAGI
+      ================================== */}
+
+      <div className="grid grid-cols-3 gap-2 mb-4">
+
+        {/* IMSAK */}
+
+        <div className="
+          rounded-2xl
+          bg-white/5
+          border
+          border-white/10
+          p-3
+          text-center
+        ">
+          <p className="text-[10px] text-white/50 uppercase tracking-wide">
+            Imsak
+          </p>
+
+          <p className="text-base font-bold mt-1">
+            {jadwal.imsak}
+          </p>
+        </div>
+
+
+        {/* TERBIT */}
+
+        <div className="
+          rounded-2xl
+          bg-white/5
+          border
+          border-white/10
+          p-3
+          text-center
+        ">
+          <p className="text-[10px] text-white/50 uppercase tracking-wide">
+            Terbit
+          </p>
+
+          <p className="text-base font-bold mt-1">
+            {jadwal.terbit}
+          </p>
+        </div>
+
+
+        {/* DUHA */}
+
+        <div className="
+          rounded-2xl
+          bg-white/5
+          border
+          border-white/10
+          p-3
+          text-center
+        ">
+          <p className="text-[10px] text-white/50 uppercase tracking-wide">
+            Duha
+          </p>
+
+          <p className="text-base font-bold mt-1">
+            {jadwal.dhuha}
+          </p>
+        </div>
+
+      </div>
+
+
+      {/* ==================================
+          NEXT PRAYER
+      ================================== */}
+
+      <div className="
+        bg-white/10
+        border
+        border-white/10
+        rounded-2xl
+        p-4
+        mb-4
+      ">
 
         <p className="text-white/60 text-xs">
           Salat Berikutnya
@@ -190,6 +348,7 @@ export default function PrayerTimes() {
         <div className="flex items-end justify-between mt-2">
 
           <div>
+
             <h3 className="text-2xl font-bold">
               {nextPrayer.name}
             </h3>
@@ -197,49 +356,109 @@ export default function PrayerTimes() {
             <p className="text-white/60 text-sm mt-1">
               Waktu adzan
             </p>
+
           </div>
 
-          <h3 className="text-3xl font-bold">
+          <h3 className="text-3xl font-bold tabular-nums">
             {nextPrayer.time}
           </h3>
 
         </div>
+
       </div>
 
-      {/* LIST */}
-      <div className="grid grid-cols-5 gap-2">
+
+      {/* ==================================
+          5 SALAT WAJIB
+      ================================== */}
+
+      <div className="
+        grid
+        grid-cols-2
+        sm:grid-cols-3
+        md:grid-cols-5
+        gap-2
+      ">
 
         {prayers.map((item) => {
 
-          const active = item.name === nextPrayer.name;
+          const active =
+            item.name === nextPrayer.name;
 
           return (
             <div
               key={item.name}
-              className={`rounded-2xl p-3 text-center border transition ${
-                active
-                  ? "bg-white text-[#0D2341] border-white"
-                  : "bg-white/5 border-white/10"
-              }`}
-            >
-              <p
-                className={`text-[11px] ${
+              className={`
+                rounded-2xl
+                p-3
+                text-center
+                border
+                transition-all
+                duration-300
+
+                ${
                   active
-                    ? "text-[#0D2341]/70"
-                    : "text-white/60"
-                }`}
+                    ? `
+                      bg-white
+                      text-[#0D2341]
+                      border-white
+                      shadow-lg
+                      scale-[1.02]
+                    `
+                    : `
+                      bg-white/5
+                      border-white/10
+                      hover:bg-white/10
+                    `
+                }
+              `}
+            >
+
+              <p
+                className={`
+                  text-[11px]
+
+                  ${
+                    active
+                      ? "text-[#0D2341]/70"
+                      : "text-white/60"
+                  }
+                `}
               >
                 {item.name}
               </p>
 
-              <h4 className="text-sm font-bold mt-2">
+              <h4 className="text-sm font-bold mt-2 tabular-nums">
                 {item.time}
               </h4>
+
             </div>
           );
         })}
 
       </div>
+
+
+      {/* ==================================
+          KETERANGAN
+      ================================== */}
+
+      <div className="mt-4 pt-3 border-t border-white/10">
+
+        <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-[10px] text-white/45">
+
+          <span>
+            Sumber data:
+          </span>
+
+          <span>
+            Bimas Islam Kementerian Agama RI.
+          </span>
+
+        </div>
+
+      </div>
+
     </div>
   );
 }
