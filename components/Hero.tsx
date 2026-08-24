@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import {
   MessageCircle,
@@ -12,11 +12,21 @@ import {
 export default function Hero() {
 
   // ==================================================
-  // STATE MODAL
+  // STATE
   // ==================================================
 
   const [openAI, setOpenAI] = useState(false);
-  const [openVideo, setOpenVideo] = useState(false);
+
+  const [openVideo, setOpenVideo] =
+    useState(false);
+
+
+  // ==================================================
+  // VIDEO REF
+  // ==================================================
+
+  const videoRef =
+    useRef<HTMLDivElement>(null);
 
 
   return (
@@ -36,10 +46,15 @@ export default function Hero() {
     >
 
       {/* ==================================================
-          BACKGROUND IMAGE
+          HERO IMAGE
       ================================================== */}
 
-      <div className="absolute inset-0">
+      <div
+        className="
+          absolute
+          inset-0
+        "
+      >
 
         <img
           src="/hero-masjid.jpg"
@@ -58,7 +73,7 @@ export default function Hero() {
 
       {/* ==================================================
           BLUE OVERLAY
-          BUKAN GRADIENT
+          TANPA GRADIENT
       ================================================== */}
 
       <div
@@ -227,7 +242,7 @@ export default function Hero() {
           >
 
             {/* ==================================================
-                AI BUTTON
+                CHAT AI
             ================================================== */}
 
             <button
@@ -290,7 +305,7 @@ export default function Hero() {
 
 
             {/* ==================================================
-                VIDEO BUTTON
+                VIDEO PROFIL
             ================================================== */}
 
             <button
@@ -364,7 +379,7 @@ export default function Hero() {
 
 
       {/* ==================================================
-          AI MODAL
+          MODAL CHAT AI
       ================================================== */}
 
       {openAI && (
@@ -372,19 +387,28 @@ export default function Hero() {
         <div
           className="
             fixed
-
             inset-0
 
             z-[9999]
 
             flex
-
-            items-center
+            items-start
             justify-center
 
-            bg-black/60
+            overflow-y-auto
 
-            p-4
+            bg-black/70
+
+            p-3
+
+            pt-16
+
+            backdrop-blur-sm
+
+            sm:p-6
+            sm:pt-20
+
+            lg:pt-24
           "
 
           onClick={() =>
@@ -396,228 +420,25 @@ export default function Hero() {
             className="
               relative
 
-              w-full
+              h-[calc(100vh-80px)]
 
-              max-w-lg
-
-              rounded-3xl
-
-              bg-white
-
-              p-6
-
-              shadow-2xl
-
-              sm:p-8
-            "
-
-            onClick={(event) =>
-              event.stopPropagation()
-            }
-          >
-
-            {/* CLOSE */}
-
-            <button
-              type="button"
-
-              onClick={() =>
-                setOpenAI(false)
-              }
-
-              className="
-                absolute
-
-                right-4
-                top-4
-
-                flex
-
-                h-10
-                w-10
-
-                items-center
-                justify-center
-
-                rounded-full
-
-                bg-[#F5F7FA]
-
-                text-[#0D2341]
-
-                transition
-
-                hover:bg-[#E8EDF3]
-              "
-            >
-
-              <X size={20} />
-
-            </button>
-
-
-            {/* TITLE */}
-
-            <div className="pr-10">
-
-              <p
-                className="
-                  text-xs
-
-                  font-semibold
-
-                  uppercase
-
-                  tracking-[0.2em]
-
-                  text-[#7A8599]
-                "
-              >
-                Asisten Digital
-              </p>
-
-              <h2
-                className="
-                  mt-2
-
-                  font-serif
-
-                  text-2xl
-
-                  font-bold
-
-                  text-[#0D2341]
-
-                  sm:text-3xl
-                "
-              >
-                Chat dengan AI
-              </h2>
-
-            </div>
-
-
-            <p
-              className="
-                mt-5
-
-                leading-relaxed
-
-                text-[#667085]
-              "
-            >
-              Asisten AI Masjid Raya Al-Jabbar
-              siap membantu memberikan informasi
-              mengenai masjid, layanan, kegiatan,
-              agenda, dan informasi lainnya.
-            </p>
-
-
-            <div
-              className="
-                mt-6
-
-                rounded-2xl
-
-                bg-[#F5F7FA]
-
-                p-5
-
-                text-sm
-
-                leading-relaxed
-
-                text-[#516176]
-              "
-            >
-              Silakan gunakan layanan Chat AI
-              untuk mendapatkan informasi
-              seputar Masjid Raya Al-Jabbar.
-            </div>
-
-
-            <button
-              type="button"
-
-              onClick={() =>
-                setOpenAI(false)
-              }
-
-              className="
-                mt-6
-
-                rounded-xl
-
-                bg-[#123A63]
-
-                px-5
-                py-3
-
-                text-sm
-
-                font-semibold
-
-                text-white
-
-                transition
-
-                hover:bg-[#0F3153]
-              "
-            >
-              Tutup
-            </button>
-
-          </div>
-
-        </div>
-
-      )}
-
-
-      {/* ==================================================
-          VIDEO MODAL
-      ================================================== */}
-
-      {openVideo && (
-
-        <div
-          className="
-            fixed
-
-            inset-0
-
-            z-[9999]
-
-            flex
-
-            items-center
-            justify-center
-
-            bg-black/75
-
-            p-4
-          "
-
-          onClick={() =>
-            setOpenVideo(false)
-          }
-        >
-
-          <div
-            className="
-              relative
+              max-h-[720px]
 
               w-full
 
-              max-w-5xl
+              max-w-[500px]
 
               overflow-hidden
 
-              rounded-3xl
+              rounded-[24px]
 
-              bg-black
+              bg-white
 
-              shadow-2xl
+              shadow-[0_25px_80px_rgba(0,0,0,0.45)]
+
+              sm:h-[720px]
+
+              sm:rounded-[28px]
             "
 
             onClick={(event) =>
@@ -625,20 +446,24 @@ export default function Hero() {
             }
           >
 
-            {/* CLOSE */}
+            {/* ==================================================
+                CLOSE CHAT
+            ================================================== */}
 
             <button
               type="button"
 
               onClick={() =>
-                setOpenVideo(false)
+                setOpenAI(false)
               }
+
+              aria-label="Tutup Chat AI"
 
               className="
                 absolute
 
-                right-4
-                top-4
+                right-3
+                top-3
 
                 z-20
 
@@ -656,38 +481,179 @@ export default function Hero() {
 
                 text-white
 
-                backdrop-blur-md
-
                 transition
 
                 hover:bg-black/80
               "
             >
 
-              <X size={20} />
+              <X size={22} />
 
             </button>
 
 
-            {/* VIDEO */}
+            {/* ==================================================
+                AI WIDGET
+            ================================================== */}
+
+            <iframe
+              src="/widget-tanya-ai"
+
+              title="Tanya AI — Masjid Raya Al-Jabbar"
+
+              className="
+                h-full
+                w-full
+
+                border-0
+              "
+
+              allow="microphone"
+            />
+
+          </div>
+
+        </div>
+
+      )}
+
+
+      {/* ==================================================
+          MODAL VIDEO
+      ================================================== */}
+
+      {openVideo && (
+
+        <div
+          className="
+            fixed
+            inset-0
+
+            z-[9999]
+
+            flex
+            items-start
+            justify-center
+
+            overflow-y-auto
+
+            bg-black/90
+
+            px-3
+            py-16
+
+            backdrop-blur-md
+
+            sm:px-6
+            sm:py-20
+          "
+
+          onClick={() =>
+            setOpenVideo(false)
+          }
+        >
+
+          <div
+            ref={videoRef}
+
+            className="
+              relative
+
+              w-full
+
+              max-w-5xl
+            "
+
+            onClick={(event) =>
+              event.stopPropagation()
+            }
+          >
+
+            {/* ==================================================
+                CLOSE VIDEO
+            ================================================== */}
+
+            <button
+              type="button"
+
+              onClick={() =>
+                setOpenVideo(false)
+              }
+
+              aria-label="Tutup video"
+
+              className="
+                absolute
+
+                right-0
+
+                -top-12
+
+                z-20
+
+                flex
+
+                h-10
+                w-10
+
+                items-center
+                justify-center
+
+                rounded-full
+
+                bg-white/10
+
+                text-white
+
+                transition
+
+                hover:bg-white/20
+
+                sm:-top-14
+              "
+            >
+
+              <X size={26} />
+
+            </button>
+
+
+            {/* ==================================================
+                VIDEO PLAYER
+            ================================================== */}
 
             <div
               className="
+                relative
+
                 aspect-video
 
                 w-full
+
+                overflow-hidden
+
+                rounded-[20px]
+
+                bg-black
+
+                shadow-[0_25px_80px_rgba(0,0,0,0.55)]
+
+                sm:rounded-[28px]
               "
             >
 
               <iframe
                 className="
+                  absolute
+                  inset-0
+
                   h-full
                   w-full
                 "
 
-                src="https://www.youtube.com/embed/"
+                src="https://www.youtube.com/embed/ud62Pr9jzfg?autoplay=1&rel=0"
 
-                title="Video Profil Masjid Raya Al-Jabbar"
+                title="Profil Masjid Raya Al-Jabbar"
 
                 allow="
                   accelerometer;
@@ -701,6 +667,58 @@ export default function Hero() {
 
                 allowFullScreen
               />
+
+            </div>
+
+
+            {/* ==================================================
+                VIDEO TITLE
+            ================================================== */}
+
+            <div
+              className="
+                mt-4
+
+                px-4
+
+                text-center
+
+                text-white
+              "
+            >
+
+              <p
+                className="
+                  text-xs
+
+                  uppercase
+
+                  tracking-[0.2em]
+
+                  text-white/60
+
+                  sm:text-sm
+                "
+              >
+                Video Profil
+              </p>
+
+
+              <h2
+                className="
+                  mt-1
+
+                  font-serif
+
+                  text-xl
+
+                  font-semibold
+
+                  sm:text-2xl
+                "
+              >
+                Masjid Raya Al-Jabbar
+              </h2>
 
             </div>
 
