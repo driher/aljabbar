@@ -8,7 +8,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 
-import Navbar from "@/components/Navbar";
+
 import Footer from "@/components/Footer";
 
 import {
@@ -567,9 +567,6 @@ export default function AgendaIndexPage() {
           text-[#0D2341]
         "
       >
-
-        <Navbar />
-
         <section
           className="
             pt-[105px]
@@ -817,8 +814,6 @@ export default function AgendaIndexPage() {
       "
     >
 
-      <Navbar />
-
 
       {/* ==================================================
           CONTENT
@@ -905,7 +900,7 @@ export default function AgendaIndexPage() {
           ================================================== */}
 
           <Link
-            href={`/agendas/${featured.slug}`}
+            href={`/agenda/${featured.slug}`}
             className="
               group
               block

@@ -1,17 +1,12 @@
-// ============================================
-// app/layout.tsx
-// GLOBAL LAYOUT - MASJID RAYA AL-JABBAR
-// ============================================
-
 import type { Metadata } from "next";
 import { Playfair_Display, Inter } from "next/font/google";
 
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import FloatingAds from "@/components/FloatingAds";
+
 import "./globals.css";
 
-
-// ==================================================
-// FONT
-// ==================================================
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -24,10 +19,6 @@ const inter = Inter({
 });
 
 
-// ==================================================
-// METADATA
-// ==================================================
-
 export const metadata: Metadata = {
   title: "Masjid Raya Al-Jabbar",
   description:
@@ -35,15 +26,12 @@ export const metadata: Metadata = {
 };
 
 
-// ==================================================
-// ROOT LAYOUT
-// ==================================================
-
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
   return (
     <html lang="id">
 
@@ -57,11 +45,6 @@ export default function RootLayout({
         `}
       >
 
-        {/* ==================================================
-            WEBSITE
-            SCALE HANYA UNTUK DESKTOP
-        ================================================== */}
-
         <div
           className="
             origin-top-left
@@ -69,102 +52,18 @@ export default function RootLayout({
             lg:w-[125%]
           "
         >
+
+          <Navbar />
+
           {children}
-        </div>
 
-       {/* ==============================
-            IKLAN PILAR — DI LUAR SCALE
-        ============================== */}
+          <Footer />
 
-        <div
-          className="
-            fixed
-            left-[24px]
-            top-[125px]
-            z-[900]
-            hidden
-            xl:block
-          "
-        >
-          <div
-            className="
-              w-[130px]
-              h-[450px]
-              rounded-[22px]
-              bg-white/95
-              shadow-lg
-              flex
-              items-center
-              justify-center
-              text-center
-            "
-          >
-            <div>
-	    
-              <p className="
-                text-[11px]
-                tracking-[0.2em]
-                text-[#A5AFBE]
-              ">
-                ADVERTISEMENT
-              </p>
-
-              <p className="
-                text-xs
-                text-[#A5AFBE]
-                mt-2
-              ">
-                130 × 450 px
-              </p>
-            </div>
-          </div>
         </div>
 
 
-        {/* IKLAN KANAN */}
+        <FloatingAds />
 
-        <div
-          className="
-            fixed
-            right-[24px]
-            top-[125px]
-            z-[900]
-            hidden
-            xl:block
-          "
-        >
-          <div
-            className="
-              w-[130px]
-              h-[450px]
-              rounded-[22px]
-              bg-white/95
-              shadow-lg
-              flex
-              items-center
-              justify-center
-              text-center
-            "
-          >
-            <div>
-              <p className="
-                text-[11px]
-                tracking-[0.2em]
-                text-[#A5AFBE]
-              ">
-                ADVERTISEMENT
-              </p>
-
-              <p className="
-                text-xs
-                text-[#A5AFBE]
-                mt-2
-              ">
-                130 × 450 px
-              </p>
-            </div>
-          </div>
-        </div>
       </body>
 
     </html>

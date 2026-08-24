@@ -27,7 +27,6 @@ import {
 
 import Link from "next/link";
 
-import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
 import {
@@ -443,7 +442,6 @@ function NewsSearchPage() {
         "
       >
 
-        <Navbar />
 
         <section
           className="
@@ -505,6 +503,16 @@ function NewsSearchPage() {
               />
 
             </div>
+
+{/* ==================================
+    IKLAN PILAR TRIGGER
+=================================== */}
+
+<div
+  id="floating-info"
+  className="h-px w-full"
+  aria-hidden="true"
+/>
 
             {/* HERO */}
 
@@ -575,8 +583,6 @@ function NewsSearchPage() {
           text-[#0D2341]
         "
       >
-
-        <Navbar />
 
         <section
           className="
@@ -697,7 +703,6 @@ function NewsSearchPage() {
         "
       >
 
-        <Navbar />
 
         <section
           className="
@@ -899,7 +904,6 @@ function NewsSearchPage() {
       "
     >
 
-      <Navbar />
 
       <section
         className="
@@ -1748,7 +1752,6 @@ export default function NewsIndexPage() {
             bg-[#F5F7FA]
           "
         >
-          <Navbar />
 
           <div
             className="

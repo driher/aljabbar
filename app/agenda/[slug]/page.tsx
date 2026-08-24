@@ -1,4 +1,3 @@
-import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
 import {
@@ -190,8 +189,6 @@ export default async function AgendaDetailPage({
 
     return (
       <main className="bg-[#F5F7FA] min-h-screen text-[#0D2341]">
-
-        <Navbar />
 
         <section className="pt-28 lg:pt-32 pb-24">
 
@@ -848,9 +845,6 @@ export default async function AgendaDetailPage({
       </section>
 
 
-      {/* FOOTER */}
-
-      <Footer />
 
     </main>
   );

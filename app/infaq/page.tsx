@@ -39,8 +39,6 @@ import {
   WalletCards,
 } from "lucide-react";
 
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 
 // ============================================
 // DATA RESMI
@@ -313,12 +311,6 @@ export default function InfaqPage() {
         text-[#0D2341]
       "
     >
-
-      {/* ======================================
-          NAVBAR
-      ======================================= */}
-
-      <Navbar />
 
       {/* ======================================
           HERO
@@ -2276,11 +2268,7 @@ export default function InfaqPage() {
 
       </section>
 
-      {/* ======================================
-          FOOTER
-      ======================================= */}
 
-      <Footer />
 
     </main>
   );

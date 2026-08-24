@@ -1,699 +1,344 @@
-// ============================================
-// components/Hero.tsx
-// PREMIUM HERO - MASJID RAYA AL-JABBAR
-//
-// FINAL MOBILE REVISION
-// ============================================
-
 "use client";
-
-import {
-  useEffect,
-  useRef,
-  useState,
-} from "react";
 
 import {
   MessageCircle,
   PlayCircle,
-  X,
 } from "lucide-react";
 
-export default function Hero() {
+interface HeroProps {
+  setOpenAI: (open: boolean) => void;
+  setOpenVideo: (open: boolean) => void;
+}
 
-  // ==========================================
-  // STATE
-  // ==========================================
-
-  const [
-    openAI,
-    setOpenAI,
-  ] = useState(false);
-
-  const [
-    openVideo,
-    setOpenVideo,
-  ] = useState(false);
-
-  // ==========================================
-  // VIDEO PLAYER REF
-  // ==========================================
-
-  const videoRef =
-    useRef<HTMLDivElement | null>(
-      null
-    );
-
-  // ==========================================
-  // FOCUS VIDEO PLAYER
-  // ==========================================
-
-  useEffect(() => {
-
-    if (!openVideo) {
-      return;
-    }
-
-    const timer =
-      window.setTimeout(() => {
-
-        videoRef.current?.scrollIntoView({
-          behavior: "smooth",
-          block: "center",
-        });
-
-      }, 150);
-
-    return () => {
-      window.clearTimeout(timer);
-    };
-
-  }, [openVideo]);
-
-  // ==========================================
-  // RENDER
-  // ==========================================
-
+export default function Hero({
+  setOpenAI,
+  setOpenVideo,
+}: HeroProps) {
   return (
-    <>
-      {/* ======================================
-          HERO
-      ======================================= */}
+    <section
+      className="
+        relative
+        z-[40]
+        min-h-[680px]
+        overflow-hidden
 
-      <section
-        className="
-          relative
-          h-[680px]
-          sm:h-[760px]
-          lg:h-[960px]
-          overflow-hidden
-        "
-      >
+        sm:min-h-[720px]
 
-        {/* ====================================
-            BACKGROUND IMAGE
-        ===================================== */}
+        lg:min-h-[760px]
+      "
+    >
+
+      {/* ==================================================
+          BACKGROUND IMAGE
+      ================================================== */}
+
+      <div className="absolute inset-0">
 
         <img
           src="/hero-masjid.jpg"
           alt="Masjid Raya Al-Jabbar"
           className="
-            absolute
-            inset-0
+            h-full
             w-full
-            h-full
             object-cover
-            object-[62%_center]
-            sm:object-center
+            object-center
           "
         />
 
-        {/* ====================================
-            DESKTOP OVERLAY
-        ===================================== */}
+      </div>
+
+
+      {/* ==================================================
+          DARK OVERLAY
+      ================================================== */}
+
+      <div
+        className="
+          absolute
+          inset-0
+
+          bg-gradient-to-t
+          from-[#06182D]/95
+          via-[#0D2341]/45
+          to-[#0D2341]/10
+        "
+      />
+
+
+      {/* ==================================================
+          EXTRA MOBILE OVERLAY
+          supaya teks lebih terbaca
+      ================================================== */}
+
+      <div
+        className="
+          absolute
+          inset-0
+
+          bg-gradient-to-r
+          from-[#0D2341]/35
+          via-transparent
+          to-transparent
+
+          sm:from-[#0D2341]/40
+        "
+      />
+
+
+      {/* ==================================================
+          HERO CONTENT
+      ================================================== */}
+
+      <div
+        className="
+          absolute
+          inset-0
+          z-[50]
+        "
+      >
 
         <div
           className="
             absolute
-            inset-0
-            hidden
-            md:block
-            bg-gradient-to-r
-            from-white/95
-            via-white/55
-            to-transparent
-          "
-        />
 
-        {/* ====================================
-            MOBILE OVERLAY
-        ===================================== */}
+            left-6
+            right-6
 
-        <div
-          className="
-            absolute
-            inset-0
-            md:hidden
-            bg-gradient-to-b
-            from-black/10
-            via-black/15
-            to-[#06182B]/95
-          "
-        />
+            top-[22%]
 
-        {/* ====================================
-            MOBILE TOP GRADIENT
-        ===================================== */}
+            sm:left-8
+            sm:right-auto
+            sm:top-[25%]
 
-        <div
-          className="
-            absolute
-            inset-x-0
-            top-0
-            h-44
-            md:hidden
-            bg-gradient-to-b
-            from-black/20
-            to-transparent
-          "
-        />
+            lg:left-[calc(8%+3rem)]
+            lg:right-auto
+            lg:top-[25%]
 
-        {/* ====================================
-            CONTENT
-        ===================================== */}
+            w-auto
 
-        <div
-          className="
-            relative
-            z-10
-            max-w-7xl
-            mx-auto
-            h-full
-            px-5
-            sm:px-6
-            lg:px-8
-            pt-32
-            sm:pt-40
-            lg:pt-44
-            flex
-            items-end
-            md:items-start
+            sm:w-[650px]
+
+            lg:w-[700px]
           "
         >
 
-          <div
+          {/* ==================================================
+              LABEL
+          ================================================== */}
+
+          <p
             className="
-              w-full
-              max-w-[700px]
-              ml-0
-              lg:ml-[8%]
-              pb-10
-              sm:pb-20
-              md:pb-0
+              uppercase
+              tracking-[0.25em]
+
+              text-[10px]
+              font-semibold
+
+              text-white/75
+
+              sm:text-xs
+
+              lg:text-sm
             "
           >
+            MASJID RAYA AL-JABBAR
+          </p>
 
-            {/* ==================================
-                EYEBROW
-            =================================== */}
 
-            <div
+          {/* ==================================================
+              TITLE
+          ================================================== */}
+
+          <h1
+            className="
+              mt-3
+
+              font-serif
+              font-bold
+              leading-[1.02]
+
+              text-[38px]
+              text-white
+
+              sm:mt-4
+              sm:text-[52px]
+
+              lg:text-[72px]
+            "
+          >
+            Masjid Raya
+            <br />
+            Al-Jabbar
+          </h1>
+
+
+          {/* ==================================================
+              DESCRIPTION
+          ================================================== */}
+
+          <p
+            className="
+              mt-4
+
+              max-w-[340px]
+
+              text-[14px]
+              leading-relaxed
+
+              text-white/80
+
+              sm:mt-6
+              sm:max-w-[400px]
+              sm:text-lg
+
+              lg:text-xl
+            "
+          >
+            Masjid kebanggaan Jawa Barat,
+            simbol persatuan, keberkahan,
+            dan peradaban Islam modern.
+          </p>
+
+
+         {/* ==================================================
+    BUTTONS
+================================================== */}
+
+<div
+  className="
+    relative
+    z-[100]
+
+    mt-20
+
+    flex
+    flex-col
+    gap-3
+
+    sm:mt-24
+    sm:flex-row
+    sm:gap-4
+
+    lg:mt-28
+  "
+>
+            {/* ==================================================
+                AI BUTTON
+            ================================================== */}
+
+            <button
+              type="button"
+              onClick={() => setOpenAI(true)}
               className="
-                inline-flex
+                flex
+                w-full
                 items-center
-                gap-2
-                mb-5
-                px-3
-                py-1.5
-                rounded-full
-                bg-black/20
-                md:bg-white/80
-                backdrop-blur-md
-                border
-                border-white/30
-                md:border-white/70
-                text-white
-                md:text-[#123A63]
-                text-[10px]
-                sm:text-xs
+                justify-center
+                gap-2.5
+
+                rounded-2xl
+
+                bg-[#123A63]
+
+                px-5
+                py-3.5
+
+                text-sm
                 font-semibold
-                uppercase
-                tracking-[0.18em]
-                shadow-sm
+                text-white
+
+                shadow-[0_10px_30px_rgba(18,58,99,0.3)]
+
+                transition-all
+
+                hover:bg-[#0F3153]
+
+                active:scale-[0.98]
+
+                sm:w-auto
+                sm:px-7
+                sm:py-4
+                sm:text-base
               "
             >
 
-              <span
-                className="
-                  w-1.5
-                  h-1.5
-                  rounded-full
-                  bg-[#D6B46A]
-                "
+              <MessageCircle
+                size={19}
+                strokeWidth={2}
               />
 
-              Masjid Raya Jawa Barat
-
-            </div>
-
-            {/* ==================================
-                TITLE
-            =================================== */}
-
-            <h1
-              className="
-                font-serif
-                text-[48px]
-                leading-[0.94]
-                sm:text-[64px]
-                md:text-[76px]
-                lg:text-[88px]
-                lg:leading-[0.95]
-                font-bold
-                text-white
-                md:text-[#0D2341]
-                drop-shadow-[0_2px_8px_rgba(0,0,0,0.35)]
-                md:drop-shadow-[0_2px_8px_rgba(255,255,255,0.35)]
-              "
-            >
-
-              Masjid Raya
-              <br />
-              Al-Jabbar
-
-            </h1>
-
-            {/* ==================================
-                DESCRIPTION
-            =================================== */}
-
-            <p
-              className="
-                mt-5
-                sm:mt-7
-                lg:mt-10
-                text-[17px]
-                sm:text-[21px]
-                lg:text-[30px]
-                leading-[1.55]
-                lg:leading-relaxed
-                text-white
-                md:text-[#344054]
-                max-w-[680px]
-                font-medium
-                lg:font-normal
-                drop-shadow-[0_2px_6px_rgba(0,0,0,0.4)]
-                md:drop-shadow-[0_1px_5px_rgba(255,255,255,0.45)]
-              "
-            >
-              Masjid kebanggaan Jawa Barat,
-              simbol persatuan, keberkahan,
-              dan peradaban Islam modern.
-            </p>
-
-            {/* ==================================
-                BUTTONS
-            =================================== */}
-
-            <div
-              className="
-                flex
-                flex-col
-                sm:flex-row
-                gap-3
-                sm:gap-4
-                mt-7
-                sm:mt-9
-                lg:mt-12
-              "
-            >
-
-              {/* =================================
-                  AI BUTTON
-              ================================== */}
-
-              <button
-                type="button"
-                onClick={() =>
-                  setOpenAI(true)
-                }
-                className="
-                  w-full
-                  sm:w-auto
-                  bg-[#123A63]
-                  hover:bg-[#0F3153]
-                  active:scale-[0.98]
-                  transition-all
-                  text-white
-                  rounded-2xl
-                  px-6
-                  sm:px-7
-                  py-3.5
-                  sm:py-4
-                  flex
-                  items-center
-                  justify-center
-                  gap-3
-                  shadow-[0_10px_30px_rgba(18,58,99,0.3)]
-                  font-semibold
-                  text-sm
-                  sm:text-base
-                "
-              >
-
-                <MessageCircle
-                  size={20}
-                />
-
+              <span>
                 Chat dengan AI
-
-              </button>
-
-              {/* =================================
-                  VIDEO BUTTON
-              ================================== */}
-
-              <button
-                type="button"
-                onClick={() =>
-                  setOpenVideo(true)
-                }
-                className="
-                  w-full
-                  sm:w-auto
-                  bg-white/95
-                  hover:bg-white
-                  active:scale-[0.98]
-                  backdrop-blur-md
-                  rounded-2xl
-                  px-6
-                  sm:px-7
-                  py-3.5
-                  sm:py-4
-                  flex
-                  items-center
-                  justify-center
-                  gap-3
-                  border
-                  border-white
-                  shadow-[0_10px_30px_rgba(0,0,0,0.15)]
-                  text-[#123A63]
-                  font-semibold
-                  text-sm
-                  sm:text-base
-                  transition-all
-                "
-              >
-
-                <PlayCircle
-                  size={21}
-                />
-
-                Video Profil Masjid
-
-              </button>
-
-            </div>
-
-            {/* ==================================
-                MOBILE SCROLL HINT
-            =================================== */}
-
-            <div
-              className="
-                mt-7
-                sm:mt-9
-                flex
-                items-center
-                gap-3
-                text-white/80
-                md:hidden
-              "
-            >
-
-              <span
-                className="
-                  block
-                  w-8
-                  h-px
-                  bg-white/70
-                "
-              />
-
-              <span
-                className="
-                  text-[10px]
-                  uppercase
-                  tracking-[0.2em]
-                "
-              >
-                Jelajahi Masjid
               </span>
 
-            </div>
+            </button>
 
-          </div>
 
-        </div>
-
-      </section>
-
-      {/* ======================================
-          MODAL CHAT AI
-      ======================================= */}
-
-      {openAI && (
-
-        <div
-          className="
-            fixed
-            inset-0
-            z-[9999]
-            bg-black/70
-            backdrop-blur-sm
-            flex
-            items-start
-            justify-center
-            p-3
-            sm:p-6
-            pt-16
-            sm:pt-20
-            lg:pt-24
-            overflow-y-auto
-          "
-          onClick={() =>
-            setOpenAI(false)
-          }
-        >
-
-          <div
-            className="
-              relative
-              w-full
-              max-w-[500px]
-              h-[calc(100vh-80px)]
-              sm:h-[720px]
-              max-h-[720px]
-              bg-white
-              rounded-[24px]
-              sm:rounded-[28px]
-              overflow-hidden
-              shadow-[0_25px_80px_rgba(0,0,0,0.45)]
-            "
-            onClick={(
-              event
-            ) =>
-              event.stopPropagation()
-            }
-          >
-
-            {/* CLOSE */}
+            {/* ==================================================
+                VIDEO BUTTON
+            ================================================== */}
 
             <button
               type="button"
-              onClick={() =>
-                setOpenAI(false)
-              }
-              aria-label="Tutup Chat AI"
+              onClick={() => setOpenVideo(true)}
               className="
-                absolute
-                top-3
-                right-3
-                z-20
-                w-10
-                h-10
-                rounded-full
-                bg-black/60
-                hover:bg-black/80
-                text-white
                 flex
+                w-full
                 items-center
                 justify-center
-                transition
+                gap-2.5
+
+                rounded-2xl
+
+                border
+                border-white
+
+                bg-white/95
+
+                px-5
+                py-3.5
+
+                text-sm
+                font-semibold
+                text-[#123A63]
+
+                shadow-[0_10px_30px_rgba(0,0,0,0.15)]
+
+                backdrop-blur-md
+
+                transition-all
+
+                hover:bg-white
+
+                active:scale-[0.98]
+
+                sm:w-auto
+                sm:px-7
+                sm:py-4
+                sm:text-base
               "
             >
 
-              <X
-                size={22}
+              <PlayCircle
+                size={20}
+                strokeWidth={2}
               />
 
+              <span>
+                Video Profil Masjid
+              </span>
+
             </button>
-
-            {/* AI WIDGET */}
-
-            <iframe
-              src="/widget-tanya-ai"
-              title="Tanya AI — Masjid Raya Al-Jabbar"
-              className="
-                w-full
-                h-full
-                border-0
-              "
-              allow="microphone"
-            />
 
           </div>
 
         </div>
 
-      )}
+      </div>
 
-      {/* ======================================
-          MODAL VIDEO
-      ======================================= */}
 
-      {openVideo && (
+     
 
-        <div
-          className="
-            fixed
-            inset-0
-            z-[9999]
-            bg-black/90
-            backdrop-blur-md
-            flex
-            items-start
-            justify-center
-            overflow-y-auto
-            px-3
-            sm:px-6
-            py-16
-            sm:py-20
-          "
-          onClick={() =>
-            setOpenVideo(false)
-          }
-        >
-
-          <div
-            ref={videoRef}
-            className="
-              relative
-              w-full
-              max-w-5xl
-              scroll-mt-10
-            "
-            onClick={(
-              event
-            ) =>
-              event.stopPropagation()
-            }
-          >
-
-            {/* CLOSE */}
-
-            <button
-              type="button"
-              onClick={() =>
-                setOpenVideo(false)
-              }
-              aria-label="Tutup video"
-              className="
-                absolute
-                -top-12
-                sm:-top-14
-                right-0
-                w-10
-                h-10
-                rounded-full
-                bg-white/10
-                hover:bg-white/20
-                text-white
-                flex
-                items-center
-                justify-center
-                transition
-                z-20
-              "
-            >
-
-              <X
-                size={26}
-              />
-
-            </button>
-
-            {/* VIDEO PLAYER */}
-
-            <div
-              className="
-                relative
-                w-full
-                overflow-hidden
-                rounded-[20px]
-                sm:rounded-[28px]
-                shadow-[0_25px_80px_rgba(0,0,0,0.55)]
-                bg-black
-                aspect-video
-              "
-            >
-
-              <iframe
-                className="
-                  absolute
-                  inset-0
-                  w-full
-                  h-full
-                "
-                src="https://www.youtube.com/embed/ud62Pr9jzfg?autoplay=1&rel=0"
-                title="Profil Masjid Raya Al-Jabbar"
-                allow="
-                  accelerometer;
-                  autoplay;
-                  clipboard-write;
-                  encrypted-media;
-                  gyroscope;
-                  picture-in-picture;
-                  web-share
-                "
-                allowFullScreen
-              />
-
-            </div>
-
-            {/* VIDEO TITLE */}
-
-            <div
-              className="
-                mt-4
-                text-white
-                text-center
-                px-4
-              "
-            >
-
-              <p
-                className="
-                  text-xs
-                  sm:text-sm
-                  text-white/60
-                  uppercase
-                  tracking-[0.2em]
-                "
-              >
-                Video Profil
-              </p>
-
-              <h2
-                className="
-                  font-serif
-                  text-xl
-                  sm:text-2xl
-                  font-semibold
-                  mt-1
-                "
-              >
-                Masjid Raya Al-Jabbar
-              </h2>
-
-            </div>
-
-          </div>
-
-        </div>
-
-      )}
-
-    </>
+    </section>
   );
 }

@@ -18,8 +18,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import ShareButtons from "@/components/ShareButtons";
 
 import {
@@ -553,12 +551,6 @@ export default async function NewsDetailPage({
     >
 
       {/* ======================================
-          NAVBAR
-      ======================================= */}
-
-      <Navbar />
-
-      {/* ======================================
           ARTICLE
       ======================================= */}
 
@@ -725,6 +717,7 @@ export default async function NewsDetailPage({
 
           </header>
 
+
           {/* ==================================
               FEATURE IMAGE
           =================================== */}
@@ -788,6 +781,16 @@ export default async function NewsDetailPage({
             )}
 
           </figure>
+
+{/* ==================================
+    IKLAN PILAR TRIGGER
+=================================== */}
+
+<div
+  id="floating-info"
+  className="h-px w-full"
+  aria-hidden="true"
+/>
 
           {/* ==================================
               ARTICLE CONTENT
@@ -879,11 +882,6 @@ export default async function NewsDetailPage({
 
       </article>
 
-      {/* ======================================
-          FOOTER
-      ======================================= */}
-
-      <Footer />
 
       {/* ======================================
           ARTICLE STYLE

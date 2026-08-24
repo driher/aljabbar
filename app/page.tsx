@@ -41,11 +41,6 @@ export default function HomePage() {
         "
       >
 
-        {/* ==================================================
-            NAVBAR
-        ================================================== */}
-        <Navbar />
-
 
         {/* ==================================================
             HERO
@@ -56,13 +51,14 @@ export default function HomePage() {
         {/* ==================================================
             FLOATING INFO SECTION
         ================================================== */}
-        <section
+<section
+  id="floating-info"
   className="
     relative
     z-20
-    -mt-8
-    sm:-mt-16
-    lg:-mt-32
+    mt-6
+    sm:mt-8
+    lg:mt-10
   "
 >
 
@@ -368,7 +364,7 @@ export default function HomePage() {
                     mt-5
                   "
                 >
-                  Dokumentasi
+                  Arsitektur
                 </h2>
 
               </div>
@@ -435,15 +431,6 @@ export default function HomePage() {
                       text-white
                     "
                   >
-
-                    <p className="text-xs uppercase tracking-widest">
-                      Kegiatan
-                    </p>
-
-
-                    <h3 className="text-lg lg:text-xl font-semibold mt-2">
-                      Kajian Akbar
-                    </h3>
 
                   </div>
 
