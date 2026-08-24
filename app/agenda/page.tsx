@@ -695,8 +695,6 @@ export default function AgendaIndexPage() {
         "
       >
 
-        <Navbar />
-
         <section
           className="
             pt-[105px]
