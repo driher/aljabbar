@@ -798,7 +798,7 @@ export default async function NewsDetailPage({
 
           <div
             className="
-              max-w-4xl
+              max-w-5xl
               mx-auto
               mt-12
             "

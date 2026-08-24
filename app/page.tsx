@@ -3,11 +3,12 @@
 // FINAL PREMIUM UI - MASJID AL JABBAR
 // ============================================
 
+"use client";
+
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import Footer from "@/components/Footer";
 
-import InfoCard from "@/components/InfoCard";
 import StatsCard from "@/components/StatsCard";
 import EventCard from "@/components/EventCard";
 import NewsCard from "@/components/NewsCard";
@@ -18,98 +19,129 @@ import VideoCard from "@/components/VideoCard";
 import {
   Building2,
   CalendarDays,
-  Heart,
   Users,
   ArrowRight,
 } from "lucide-react";
 
+
 export default function HomePage() {
+
   return (
     <>
- 
-
-
       {/* ==================================================
           MAIN WEBSITE
       ================================================== */}
+
       <main
         className="
-            min-h-screen
-  bg-[#F5F7FA]
-  overflow-x-hidden
-  text-[#0D2341]
+          min-h-screen
+          bg-[#F5F7FA]
+          overflow-x-hidden
+          text-[#0D2341]
         "
       >
-
 
         {/* ==================================================
             HERO
         ================================================== */}
+
         <Hero />
 
 
         {/* ==================================================
             FLOATING INFO SECTION
         ================================================== */}
-<section
-  id="floating-info"
-  className="
-    relative
-    z-20
-    mt-6
-    sm:mt-8
-    lg:mt-10
-  "
->
 
-          <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <section
+          id="floating-info"
+          className="
+            relative
+            z-20
+            mt-6
+
+            sm:mt-8
+
+            lg:mt-10
+          "
+        >
+
+          <div
+            className="
+              max-w-7xl
+              mx-auto
+              px-4
+              sm:px-6
+            "
+          >
 
             <div
               className="
                 bg-white
                 rounded-3xl
+
                 border
                 border-[#E8EDF3]
+
                 shadow-[0_10px_40px_rgba(0,0,0,0.06)]
+
                 px-6
                 lg:px-8
+
                 py-6
                 lg:py-8
               "
             >
 
-
               {/* ==================================================
                   HORIZONTAL ADVERTISEMENT
               ================================================== */}
-              <section className="relative z-10 py-2">
 
-                <div className="max-w-6xl mx-auto">
+              <section
+                className="
+                  relative
+                  z-10
+                  py-2
+                "
+              >
+
+                <div
+                  className="
+                    max-w-6xl
+                    mx-auto
+                  "
+                >
 
                   <div
                     className="
                       relative
                       w-full
+
                       min-h-[90px]
                       lg:min-h-[110px]
+
                       rounded-2xl
+
                       overflow-hidden
+
                       bg-white
+
                       border
                       border-[#E8EDF3]
+
                       shadow-sm
                     "
                   >
 
-                    {/* LABEL */}
                     <span
                       className="
                         absolute
                         top-2
                         left-3
+
                         text-[9px]
                         uppercase
                         tracking-widest
+
                         text-[#A0A9B7]
                       "
                     >
@@ -117,25 +149,42 @@ export default function HomePage() {
                     </span>
 
 
-                    {/* AD SPACE */}
                     <div
                       className="
                         flex
                         items-center
                         justify-center
+
                         min-h-[90px]
                         lg:min-h-[110px]
+
                         px-4
                       "
                     >
 
-                      <div className="text-center text-[#B0B7C3]">
+                      <div
+                        className="
+                          text-center
+                          text-[#B0B7C3]
+                        "
+                      >
 
-                        <p className="text-xs uppercase tracking-[0.2em]">
+                        <p
+                          className="
+                            text-xs
+                            uppercase
+                            tracking-[0.2em]
+                          "
+                        >
                           Ruang Iklan
                         </p>
 
-                        <p className="text-[11px] mt-1">
+                        <p
+                          className="
+                            text-[11px]
+                            mt-1
+                          "
+                        >
                           970 × 90 px
                         </p>
 
@@ -153,23 +202,41 @@ export default function HomePage() {
               {/* ==================================================
                   NEWS SECTION
               ================================================== */}
+
               <section className="pb-24">
 
-                <div className="max-w-6xl mx-auto px-4 sm:px-6">
+                <div
+                  className="
+                    max-w-6xl
+                    mx-auto
+                    px-4
+                    sm:px-6
+                  "
+                >
 
-                  {/* HEADER */}
-                  <div className="flex items-end justify-between">
+                  <div
+                    className="
+                      flex
+                      items-end
+                      justify-between
+                    "
+                  >
 
                     <div>
 
                       <h2
                         className="
                           font-serif
+
                           text-[40px]
                           lg:text-[52px]
+
                           leading-tight
+
                           font-bold
+
                           text-[#0D2341]
+
                           mt-5
                         "
                       >
@@ -181,186 +248,242 @@ export default function HomePage() {
                   </div>
 
 
-                  {/* NEWS FROM WORDPRESS */}
                   <NewsCard />
 
                 </div>
 
               </section>
 
-{/* =========================
-    VIDEO SECTION
-========================= */}
 
-<section className="pb-24">
+              {/* ==================================================
+                  VIDEO SECTION
+              ================================================== */}
 
-  <div className="max-w-6xl mx-auto px-4 sm:px-6">
+              <section className="pb-24">
 
-    {/* HEADER */}
+                <div
+                  className="
+                    max-w-6xl
+                    mx-auto
+                    px-4
+                    sm:px-6
+                  "
+                >
 
-    <div className="flex items-end justify-between">
+                  <div
+                    className="
+                      flex
+                      items-end
+                      justify-between
+                    "
+                  >
 
-      <div>
+                    <div>
 
-        <p
-          className="
-            uppercase
-            tracking-[0.25em]
-            text-[#7A8599]
-            font-medium
-            text-sm
-          "
-        >
-          Multimedia
-        </p>
+                      <p
+                        className="
+                          uppercase
+                          tracking-[0.25em]
 
-        <h2
-          className="
-            font-serif
-            text-[40px]
-            lg:text-[52px]
-            leading-tight
-            font-bold
-            text-[#0D2341]
-            mt-5
-          "
-        >
-          Video Terbaru
-        </h2>
+                          text-[#7A8599]
 
-      </div>
-
-    </div>
+                          font-medium
+                          text-sm
+                        "
+                      >
+                        Multimedia
+                      </p>
 
 
-    {/* VIDEO */}
+                      <h2
+                        className="
+                          font-serif
 
-    <div className="mt-14">
+                          text-[40px]
+                          lg:text-[52px]
 
-      <VideoCard />
+                          leading-tight
 
-    </div>
+                          font-bold
 
-  </div>
+                          text-[#0D2341]
 
-</section>
+                          mt-5
+                        "
+                      >
+                        Video Terbaru
+                      </h2>
 
+                    </div>
 
-{/* ==================================================
-    PRAYER + INFO CARDS
-================================================== */}
-
-<div
-  className="
-    grid
-    grid-cols-1
-    md:grid-cols-2
-    gap-6
-  "
->
-
-  {/* PRAYER TIMES */}
-
-  <div className="h-full">
-    <PrayerTimes />
-  </div>
+                  </div>
 
 
-  {/* PERMOHONAN IZIN KEGIATAN */}
+                  <div className="mt-14">
+                    <VideoCard />
+                  </div>
 
-  <div className="h-full">
-    <ActivityPermitCard />
-  </div>
+                </div>
 
-</div>
-
-</div>
-
-</div>
-
-</section>
-
-   
-{/* =========================
-    EVENT SECTION
-========================= */}
-
-<section className="pb-24">
-
-  <div className="max-w-6xl mx-auto px-4 sm:px-6">
-
-    {/* HEADER */}
-
-    <div className="
-      flex
-      flex-col
-      lg:flex-row
-      lg:items-end
-      lg:justify-between
-      gap-6
-    ">
-
-      <div>
-
- 
-
-        <h2 className="
-          font-serif
-          text-[40px]
-          lg:text-[52px]
-          leading-tight
-          font-bold
-          text-[#0D2341]
-          mt-5
-        ">
-          Agenda Kegiatan
-        </h2>
-
-      </div>
-
-      <button className="
-        flex
-        items-center
-        gap-2
-        text-[#123A63]
-        font-semibold
-      ">
-        Lihat Semua
-        <ArrowRight size={18} />
-      </button>
-
-    </div>
+              </section>
 
 
-    {/* AGENDA WORDPRESS */}
+              {/* ==================================================
+                  PRAYER + ACTIVITY PERMIT
+              ================================================== */}
 
-    <EventCard />
+              <div
+                className="
+                  grid
+                  grid-cols-1
+                  md:grid-cols-2
 
-  </div>
+                  gap-6
+                "
+              >
 
-</section>
+                {/* PRAYER */}
+
+                <div className="h-full">
+                  <PrayerTimes />
+                </div>
+
+
+                {/* PERMOHONAN IZIN */}
+
+                <div className="h-full">
+                  <ActivityPermitCard />
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </section>
 
 
         {/* ==================================================
-            GALLERY SECTION
+            EVENT SECTION
         ================================================== */}
+
         <section className="pb-24">
 
-          <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div
+            className="
+              max-w-6xl
+              mx-auto
+              px-4
+              sm:px-6
+            "
+          >
 
-            {/* HEADER */}
-            <div className="flex items-end justify-between">
+            <div
+              className="
+                flex
+                flex-col
+
+                lg:flex-row
+                lg:items-end
+                lg:justify-between
+
+                gap-6
+              "
+            >
 
               <div>
 
                 <h2
                   className="
                     font-serif
+
                     text-[40px]
                     lg:text-[52px]
+
                     leading-tight
+
                     font-bold
+
                     text-[#0D2341]
+
+                    mt-5
+                  "
+                >
+                  Agenda Kegiatan
+                </h2>
+
+              </div>
+
+
+              <button
+                type="button"
+                className="
+                  flex
+                  items-center
+                  gap-2
+
+                  text-[#123A63]
+
+                  font-semibold
+                "
+              >
+                Lihat Semua
+
+                <ArrowRight size={18} />
+
+              </button>
+
+            </div>
+
+
+            {/* AGENDA WORDPRESS */}
+
+            <EventCard />
+
+          </div>
+
+        </section>
+
+
+        {/* ==================================================
+            GALLERY SECTION
+        ================================================== */}
+
+        <section className="pb-24">
+
+          <div
+            className="
+              max-w-6xl
+              mx-auto
+              px-4
+              sm:px-6
+            "
+          >
+
+            <div
+              className="
+                flex
+                items-end
+                justify-between
+              "
+            >
+
+              <div>
+
+                <h2
+                  className="
+                    font-serif
+
+                    text-[40px]
+                    lg:text-[52px]
+
+                    leading-tight
+
+                    font-bold
+
+                    text-[#0D2341]
+
                     mt-5
                   "
                 >
@@ -372,13 +495,18 @@ export default function HomePage() {
             </div>
 
 
-            {/* GRID */}
+            {/* ==================================================
+                GALLERY GRID
+            ================================================== */}
+
             <div
               className="
                 grid
                 grid-cols-2
                 md:grid-cols-4
+
                 gap-5
+
                 mt-14
               "
             >
@@ -389,10 +517,14 @@ export default function HomePage() {
                   key={item}
                   className="
                     relative
+
                     rounded-3xl
+
                     overflow-hidden
+
                     h-[240px]
                     lg:h-[300px]
+
                     group
                   "
                 >
@@ -403,8 +535,11 @@ export default function HomePage() {
                     className="
                       w-full
                       h-full
+
                       object-cover
+
                       group-hover:scale-110
+
                       transition
                       duration-700
                     "
@@ -415,24 +550,13 @@ export default function HomePage() {
                     className="
                       absolute
                       inset-0
+
                       bg-gradient-to-t
                       from-black/70
                       via-black/10
                       to-transparent
                     "
                   />
-
-
-                  <div
-                    className="
-                      absolute
-                      bottom-5
-                      left-5
-                      text-white
-                    "
-                  >
-
-                  </div>
 
                 </div>
 
@@ -445,23 +569,46 @@ export default function HomePage() {
         </section>
 
 
-           {/* ==================================================
+        {/* ==================================================
             ABOUT SECTION
         ================================================== */}
+
         <section className="pt-24 pb-24">
 
-          <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div
+            className="
+              max-w-6xl
+              mx-auto
+              px-4
+              sm:px-6
+            "
+          >
 
-            <div className="grid lg:grid-cols-2 gap-10 lg:gap-14 items-start">
+            <div
+              className="
+                grid
+                lg:grid-cols-2
 
-              {/* LEFT */}
+                gap-10
+                lg:gap-14
+
+                items-start
+              "
+            >
+
+              {/* ==================================================
+                  LEFT
+              ================================================== */}
+
               <div>
 
                 <p
                   className="
                     uppercase
                     tracking-[0.25em]
+
                     text-[#7A8599]
+
                     font-medium
                     text-sm
                   "
@@ -473,11 +620,16 @@ export default function HomePage() {
                 <h2
                   className="
                     font-serif
+
                     text-[42px]
                     lg:text-[56px]
+
                     leading-tight
+
                     font-bold
+
                     text-[#0D2341]
+
                     mt-5
                   "
                 >
@@ -490,10 +642,14 @@ export default function HomePage() {
                 <p
                   className="
                     mt-8
+
                     text-lg
                     lg:text-xl
+
                     leading-relaxed
+
                     text-[#516176]
+
                     max-w-xl
                   "
                 >
@@ -505,18 +661,27 @@ export default function HomePage() {
 
 
                 <button
+                  type="button"
                   className="
                     mt-10
+
                     bg-[#123A63]
+
                     hover:bg-[#0f3153]
+
                     transition
+
                     text-white
+
                     px-7
                     py-4
+
                     rounded-2xl
+
                     flex
                     items-center
                     gap-3
+
                     shadow-lg
                   "
                 >
@@ -529,23 +694,40 @@ export default function HomePage() {
               </div>
 
 
-              {/* RIGHT */}
-              <div className="grid sm:grid-cols-3 gap-5">
+              {/* ==================================================
+                  RIGHT - STATISTICS
+              ================================================== */}
+
+              <div
+                className="
+                  grid
+                  sm:grid-cols-3
+                  gap-5
+                "
+              >
 
                 <StatsCard
-                  icon={<Users className="w-10 h-10" />}
+                  icon={
+                    <Users className="w-10 h-10" />
+                  }
                   title="33K"
                   desc="Kapasitas Jamaah"
                 />
 
+
                 <StatsCard
-                  icon={<Building2 className="w-10 h-10" />}
+                  icon={
+                    <Building2 className="w-10 h-10" />
+                  }
                   title="99K"
                   desc="Luas Bangunan"
                 />
 
+
                 <StatsCard
-                  icon={<CalendarDays className="w-10 h-10" />}
+                  icon={
+                    <CalendarDays className="w-10 h-10" />
+                  }
                   title="2022"
                   desc="Peresmian"
                 />
@@ -557,10 +739,7 @@ export default function HomePage() {
           </div>
 
         </section>
-        {/* ==================================================
-            FOOTER
-        ================================================== */}
-        <Footer />
+
 
       </main>
     </>
