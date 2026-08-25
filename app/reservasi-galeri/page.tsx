@@ -944,10 +944,6 @@ export default function ReservasiGaleriPage() {
 
       </section>
 
-        {/* ==================================================
-            FOOTER
-        ================================================== */}
-        <Footer />
 
 
     </main>

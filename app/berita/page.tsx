@@ -1769,8 +1769,6 @@ export default function NewsIndexPage() {
               "
             />
           </div>
-
-          <Footer />
         </main>
       }
     >
