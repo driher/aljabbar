@@ -252,8 +252,6 @@ export default async function AgendaDetailPage({
 
         </section>
 
-        <Footer />
-
       </main>
     );
   }
