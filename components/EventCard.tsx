@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -52,7 +52,7 @@ export default function EventCard() {
     async function fetchAgenda() {
       try {
         const response = await fetch(
-          "https://pas.akarmusic.com/wp-json/wp/v2/agenda?_embed&per_page=3"
+          "https://cms.masjidrayaaljabbar.id/wp-json/wp/v2/agenda?_embed&per_page=3"
         );
 
         if (!response.ok) {
@@ -218,7 +218,7 @@ export default function EventCard() {
       >
 
         <div className="text-4xl mb-4">
-          📅
+          ðŸ“…
         </div>
 
         <h3 className="
@@ -489,7 +489,7 @@ export default function EventCard() {
                       )}
 
                       {agenda.acf?.waktu_selesai &&
-                        ` – ${formatTime(
+                        ` â€“ ${formatTime(
                           agenda.acf
                             ?.waktu_selesai
                         )}`}

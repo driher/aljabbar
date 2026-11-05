@@ -1,7 +1,7 @@
-import { NextResponse } from "next/server";
+﻿import { NextResponse } from "next/server";
 
 const WORDPRESS_API =
-  "https://pas.akarmusic.com/wp-json/wp/v2/agenda";
+  "https://cms.masjidrayaaljabbar.id/wp-json/wp/v2/agenda";
 
 export async function GET(
   request: Request

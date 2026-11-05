@@ -1,4 +1,4 @@
-// ============================================
+﻿// ============================================
 // lib/wordpress.ts
 // WordPress REST API Helper
 // Masjid Raya Al-Jabbar
@@ -6,7 +6,7 @@
 
 const WORDPRESS_API =
   process.env.NEXT_PUBLIC_WORDPRESS_API ||
-  "https://pas.akarmusic.com/wp-json/wp/v2";
+  "https://cms.masjidrayaaljabbar.id/wp-json/wp/v2";
 
 
 // ============================================

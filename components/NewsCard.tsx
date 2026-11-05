@@ -1,4 +1,4 @@
-// ============================================
+﻿// ============================================
 // components/NewsCard.tsx
 // PREMIUM NEWS CARD - MASJID RAYA AL-JABBAR
 // ============================================
@@ -43,7 +43,7 @@ export default function NewsCard() {
     async function fetchNews() {
       try {
         const response = await fetch(
-          "https://pas.akarmusic.com/wp-json/wp/v2/posts?_embed&per_page=4"
+          "https://cms.masjidrayaaljabbar.id/wp-json/wp/v2/posts?_embed&per_page=4"
         );
 
         if (!response.ok) {
@@ -172,7 +172,7 @@ export default function NewsCard() {
       <div className="mt-14 rounded-2xl border border-[#E8ECF2] bg-white p-10 text-center">
 
         <div className="text-4xl mb-4">
-          📰
+          ðŸ“°
         </div>
 
         <h3 className="font-serif text-2xl font-bold text-[#0D2341]">
@@ -385,7 +385,7 @@ export default function NewsCard() {
                     group-hover:translate-x-1
                   "
                 >
-                  →
+                  â†’
                 </span>
 
               </div>
@@ -579,7 +579,7 @@ export default function NewsCard() {
                       group-hover:translate-x-1
                     "
                   >
-                    →
+                    â†’
                   </span>
 
                 </Link>

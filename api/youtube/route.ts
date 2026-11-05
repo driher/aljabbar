@@ -19,20 +19,12 @@ function decodeHtml(text: string) {
     .replace(/&gt;/g, ">");
 }
 
-export async function GET() {
-  try {
-    const response = await fetch(FEED_URL, {
-      headers: {
-        "User-Agent":
-          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/151 Safari/537.36",
-        Accept:
-          "application/atom+xml, application/xml, text/xml",
-      },
-
-      next: {
-        revalidate: 300,
-      },
-    });
+const response = await fetch(FEED_URL, {
+  cache: "no-store",
+  headers: {
+    Accept: "application/atom+xml",
+  },
+});
 
     if (!response.ok) {
       throw new Error(

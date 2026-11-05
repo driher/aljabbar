@@ -1,4 +1,4 @@
-import {
+﻿import {
   CalendarDays,
   Clock,
   MapPin,
@@ -53,7 +53,7 @@ async function getAgenda(
   try {
 
     const response = await fetch(
-      `https://pas.akarmusic.com/wp-json/wp/v2/agenda?slug=${encodeURIComponent(
+      `https://cms.masjidrayaaljabbar.id/wp-json/wp/v2/agenda?slug=${encodeURIComponent(
         slug
       )}&_embed`,
       {
@@ -206,7 +206,7 @@ export default async function AgendaDetailPage({
             ">
 
               <div className="text-5xl mb-5">
-                📅
+                ðŸ“…
               </div>
 
               <h1 className="
@@ -571,7 +571,7 @@ export default async function AgendaDetailPage({
                 {waktuMulai}
 
                 {waktuSelesai &&
-                  ` – ${waktuSelesai}`}
+                  ` â€“ ${waktuSelesai}`}
 
                 {" WIB"}
 

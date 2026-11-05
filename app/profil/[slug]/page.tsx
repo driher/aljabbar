@@ -1,4 +1,4 @@
-import Navbar from "@/components/Navbar";
+﻿import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
@@ -41,7 +41,7 @@ async function getPage(
   try {
 
     const response = await fetch(
-      `https://pas.akarmusic.com/wp-json/wp/v2/pages?slug=${encodeURIComponent(
+      `https://cms.masjidrayaaljabbar.id/wp-json/wp/v2/pages?slug=${encodeURIComponent(
         slug
       )}&_embed`,
       {
@@ -160,7 +160,7 @@ export default async function ProfilPage({
                 text-5xl
                 mb-5
               ">
-                📄
+                ðŸ“„
               </div>
 
               <h1 className="

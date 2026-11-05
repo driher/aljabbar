@@ -5,10 +5,7 @@
 
 import type { Metadata } from "next";
 
-import {
-  Playfair_Display,
-  Inter,
-} from "next/font/google";
+import localFont from "next/font/local";
 
 import "./globals.css";
 
@@ -19,14 +16,16 @@ import SiteShell from "@/components/SiteShell";
 // FONT
 // ==================================================
 
-const playfair = Playfair_Display({
-  subsets: ["latin"],
+const playfair = localFont({
+  src: "../public/fonts/PlayfairDisplay-Variable.ttf",
   variable: "--font-playfair",
+  display: "swap",
 });
 
-const inter = Inter({
-  subsets: ["latin"],
+const inter = localFont({
+  src: "../public/fonts/Inter-Variable.ttf",
   variable: "--font-inter",
+  display: "swap",
 });
 
 

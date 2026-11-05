@@ -1,4 +1,4 @@
-// ============================================
+﻿// ============================================
 // app/berita/[slug]/page.tsx
 //
 // DETAIL BERITA - MASJID RAYA AL-JABBAR
@@ -30,7 +30,7 @@ import {
 // ============================================
 
 const WORDPRESS_API =
-  "https://pas.akarmusic.com/wp-json/wp/v2/posts";
+  "https://cms.masjidrayaaljabbar.id/wp-json/wp/v2/posts";
 
 // ============================================
 // GANTI DENGAN DOMAIN PRODUCTION
@@ -98,7 +98,7 @@ interface NewsPost {
 }
 
 // ============================================
-// CLEAN HTML → TEXT
+// CLEAN HTML â†’ TEXT
 // ============================================
 
 function cleanText(
@@ -118,8 +118,8 @@ function cleanText(
     .replace(/&#038;/g, "&")
     .replace(/&amp;/g, "&")
     .replace(/&#8230;/g, "...")
-    .replace(/&#8211;/g, "–")
-    .replace(/&#8212;/g, "—")
+    .replace(/&#8211;/g, "â€“")
+    .replace(/&#8212;/g, "â€”")
     .replace(/\s+/g, " ")
     .trim();
 }
@@ -171,9 +171,9 @@ function getImage(
 // HANYA dari:
 //
 // WordPress
-// → Media
-// → Feature Image
-// → Caption
+// â†’ Media
+// â†’ Feature Image
+// â†’ Caption
 //
 // Tidak mengambil caption dari artikel.
 //
@@ -636,7 +636,7 @@ export default async function NewsDetailPage({
               </span>
 
               <span>
-                •
+                â€¢
               </span>
 
               <span
