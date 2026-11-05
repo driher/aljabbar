@@ -5,6 +5,9 @@
 
 "use client";
 
+import FloatingAds from "@/components/FloatingAds";
+
+
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import Footer from "@/components/Footer";
@@ -22,6 +25,8 @@ import {
   Users,
   ArrowRight,
 } from "lucide-react";
+
+
 
 
 export default function HomePage() {
@@ -92,111 +97,7 @@ export default function HomePage() {
               "
             >
 
-              {/* ==================================================
-                  HORIZONTAL ADVERTISEMENT
-              ================================================== */}
-
-              <section
-                className="
-                  relative
-                  z-10
-                  py-2
-                "
-              >
-
-                <div
-                  className="
-                    max-w-6xl
-                    mx-auto
-                  "
-                >
-
-                  <div
-                    className="
-                      relative
-                      w-full
-
-                      min-h-[90px]
-                      lg:min-h-[110px]
-
-                      rounded-2xl
-
-                      overflow-hidden
-
-                      bg-white
-
-                      border
-                      border-[#E8EDF3]
-
-                      shadow-sm
-                    "
-                  >
-
-                    <span
-                      className="
-                        absolute
-                        top-2
-                        left-3
-
-                        text-[9px]
-                        uppercase
-                        tracking-widest
-
-                        text-[#A0A9B7]
-                      "
-                    >
-                      Advertisement
-                    </span>
-
-
-                    <div
-                      className="
-                        flex
-                        items-center
-                        justify-center
-
-                        min-h-[90px]
-                        lg:min-h-[110px]
-
-                        px-4
-                      "
-                    >
-
-                      <div
-                        className="
-                          text-center
-                          text-[#B0B7C3]
-                        "
-                      >
-
-                        <p
-                          className="
-                            text-xs
-                            uppercase
-                            tracking-[0.2em]
-                          "
-                        >
-                          Ruang Iklan
-                        </p>
-
-                        <p
-                          className="
-                            text-[11px]
-                            mt-1
-                          "
-                        >
-                          970 × 90 px
-                        </p>
-
-                      </div>
-
-                    </div>
-
-                  </div>
-
-                </div>
-
-              </section>
+              {/* Slot iklan horizontal dikelola melalui FloatingAds dari WordPress CMS. */}
 
 
               {/* ==================================================
@@ -742,6 +643,7 @@ export default function HomePage() {
 
 
       </main>
+
     </>
   );
 }

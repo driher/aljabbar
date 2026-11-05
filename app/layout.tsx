@@ -10,6 +10,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 
 import SiteShell from "@/components/SiteShell";
+import FloatingAds from "@/components/FloatingAds";
 
 
 // ==================================================
@@ -70,6 +71,9 @@ export default function RootLayout({
         <SiteShell>
           {children}
         </SiteShell>
+
+        {/* Iklan global: tampil di seluruh halaman website. */}
+        <FloatingAds />
 
       </body>
 
