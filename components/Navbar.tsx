@@ -29,8 +29,8 @@ type DropdownItem = {
 
 const profilMenu: DropdownItem[] = [
   {
-    label: "Profil Masjid",
-    href: "/profil",
+    label: "Profil DKM",
+    href: "/profil/profil-dkm",
   },
   {
     label: "Sejarah",
@@ -50,11 +50,11 @@ const informasiMenu: DropdownItem[] = [
   },
   {
     label: "Pengumuman",
-    href: "/informasi/pengumuman",
+    href: "/pengumuman",
   },
   {
     label: "Jadwal Salat",
-    href: "/informasi/jadwal-shalat",
+    href: "/jadwal-shalat",
   },
 ];
 

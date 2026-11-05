@@ -1,5 +1,4 @@
-﻿import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+﻿import Footer from "@/components/Footer";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
@@ -128,8 +127,7 @@ export default async function ProfilPage({
         text-[#0D2341]
       ">
 
-        <Navbar />
-
+       
         <section className="
           pt-28
           lg:pt-32
@@ -252,11 +250,6 @@ export default async function ProfilPage({
   text-[#0D2341]
     ">
 
-      {/* ==================================================
-          NAVBAR
-      ================================================== */}
-
-      <Navbar />
 
 
       {/* ==================================================

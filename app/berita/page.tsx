@@ -1727,7 +1727,7 @@ function NewsSearchPage() {
 
       </section>
 
-      <Footer />
+
 
     </main>
   );

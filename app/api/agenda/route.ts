@@ -1,192 +1,281 @@
-﻿import { NextResponse } from "next/server";
+﻿
+import { NextResponse } from "next/server";
+
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
 
 const WORDPRESS_API =
   "https://cms.masjidrayaaljabbar.id/wp-json/wp/v2/agenda";
 
-export async function GET(
-  request: Request
-) {
+const REQUEST_TIMEOUT = 15000;
+
+// ==================================================
+// HELPER: ERROR DETAIL
+// ==================================================
+
+function getErrorDetails(error: unknown) {
+  if (!(error instanceof Error)) {
+    return {
+      message: String(error),
+      cause: null,
+      code: null,
+    };
+  }
+
+  const cause = error.cause;
+
+  const causeMessage =
+    cause instanceof Error
+      ? cause.message
+      : cause
+        ? String(cause)
+        : null;
+
+  const causeCode =
+    cause && typeof cause === "object" && "code" in cause
+      ? String(cause.code)
+      : null;
+
+  return {
+    message: error.message,
+    cause: causeMessage,
+    code: causeCode,
+  };
+}
+
+// ==================================================
+// GET AGENDA
+// ==================================================
+
+export async function GET(request: Request) {
   try {
+    const { searchParams } = new URL(request.url);
 
-    const { searchParams } =
-      new URL(request.url);
+    // ==============================================
+    // VALIDASI PAGINATION
+    // ==============================================
 
-    const page =
-      searchParams.get("page") || "1";
-
-    const perPage =
-      searchParams.get("per_page") || "14";
-
-
-    const url =
-      `${WORDPRESS_API}?_embed&per_page=${perPage}&page=${page}`;
-
-
-    console.log(
-      "REQUEST WORDPRESS:",
-      url
+    const requestedPage = Number(
+      searchParams.get("page") || 1
     );
 
+    const requestedPerPage = Number(
+      searchParams.get("per_page") || 14
+    );
 
-    const response =
-      await fetch(url, {
+    const page =
+      Number.isInteger(requestedPage) && requestedPage > 0
+        ? requestedPage
+        : 1;
+
+    const perPage =
+      Number.isInteger(requestedPerPage) &&
+      requestedPerPage > 0
+        ? Math.min(requestedPerPage, 100)
+        : 14;
+
+    // ==============================================
+    // SUSUN URL WORDPRESS
+    // ==============================================
+
+    const wordpressUrl = new URL(WORDPRESS_API);
+
+    wordpressUrl.searchParams.set("_embed", "1");
+    wordpressUrl.searchParams.set(
+      "per_page",
+      String(perPage)
+    );
+    wordpressUrl.searchParams.set(
+      "page",
+      String(page)
+    );
+
+    // ==============================================
+    // LOG REQUEST
+    // ==============================================
+
+    console.log(
+      "[AGENDA API] Request:",
+      wordpressUrl.toString()
+    );
+
+    // ==============================================
+    // FETCH WORDPRESS
+    // ==============================================
+
+    const controller = new AbortController();
+
+    const timeout = setTimeout(() => {
+      controller.abort();
+    }, REQUEST_TIMEOUT);
+
+    let response: Response;
+
+    try {
+      response = await fetch(wordpressUrl.toString(), {
         method: "GET",
 
         headers: {
-          Accept:
-            "application/json",
-          "User-Agent":
-            "Mozilla/5.0",
+          Accept: "application/json",
+          "User-Agent": "MasjidRayaAlJabbar/1.0",
         },
 
         cache: "no-store",
+        signal: controller.signal,
       });
-
-
-    const text =
-      await response.text();
-
+    } finally {
+      clearTimeout(timeout);
+    }
 
     console.log(
-      "WORDPRESS STATUS:",
+      "[AGENDA API] WordPress status:",
       response.status
     );
 
+    // ==============================================
+    // AMBIL RESPONSE
+    // ==============================================
 
-    // ==========================================
-    // WORDPRESS ERROR
-    // ==========================================
+    const responseText = await response.text();
+
+    // ==============================================
+    // CEK STATUS WORDPRESS
+    // ==============================================
 
     if (!response.ok) {
-
-      return NextResponse.json(
-        {
-          success: false,
-
-          error:
-            "WordPress gagal memberikan data agenda",
-
-          status:
-            response.status,
-
-          wordpress_url:
-            url,
-
-          detail:
-            text.substring(0, 2000),
-        },
-
-        {
-          status:
-            response.status,
-        }
+      console.error(
+        "[AGENDA API] WordPress error:",
+        response.status,
+        responseText.substring(0, 1000)
       );
 
-    }
-
-
-    // ==========================================
-    // PARSE JSON
-    // ==========================================
-
-    let data;
-
-    try {
-
-      data =
-        JSON.parse(text);
-
-    } catch {
-
       return NextResponse.json(
         {
           success: false,
-
-          error:
-            "WordPress tidak mengembalikan JSON",
-
-          status:
-            response.status,
-
-          detail:
-            text.substring(0, 2000),
+          error: "WordPress gagal memberikan data agenda",
+          status: response.status,
+          detail: responseText.substring(0, 2000),
         },
-
         {
           status: 502,
         }
       );
-
     }
 
+    // ==============================================
+    // PARSE JSON
+    // ==============================================
 
-    // ==========================================
-    // RESPONSE
-    // ==========================================
+    let data: unknown;
 
-    const result =
-      NextResponse.json(data);
-
-
-    const total =
-      response.headers.get(
-        "X-WP-Total"
+    try {
+      data = JSON.parse(responseText);
+    } catch {
+      console.error(
+        "[AGENDA API] Invalid JSON:",
+        responseText.substring(0, 1000)
       );
 
-    const totalPages =
-      response.headers.get(
-        "X-WP-TotalPages"
+      return NextResponse.json(
+        {
+          success: false,
+          error: "WordPress tidak mengembalikan JSON valid",
+          detail: responseText.substring(0, 2000),
+        },
+        {
+          status: 502,
+        }
       );
-
-
-    if (total) {
-
-      result.headers.set(
-        "X-WP-Total",
-        total
-      );
-
     }
 
+    // ==============================================
+    // VALIDASI FORMAT DATA
+    // ==============================================
 
-    if (totalPages) {
-
-      result.headers.set(
-        "X-WP-TotalPages",
-        totalPages
+    if (!Array.isArray(data)) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Format data agenda dari WordPress tidak valid",
+          detail: data,
+        },
+        {
+          status: 502,
+        }
       );
-
     }
 
+    // ==============================================
+    // RESPONSE HEADER PAGINATION
+    // ==============================================
 
-    return result;
+    const headers = new Headers();
 
-
-  } catch (error) {
-
-    console.error(
-      "AGENDA API ERROR:",
-      error
+    headers.set(
+      "Content-Type",
+      "application/json; charset=utf-8"
     );
 
+    headers.set(
+      "Cache-Control",
+      "no-store, no-cache, must-revalidate"
+    );
+
+    const total = response.headers.get("X-WP-Total");
+    const totalPages = response.headers.get("X-WP-TotalPages");
+
+    if (total !== null) {
+      headers.set("X-WP-Total", total);
+    }
+
+    if (totalPages !== null) {
+      headers.set("X-WP-TotalPages", totalPages);
+    }
+
+    // ==============================================
+    // SUCCESS
+    // ==============================================
+
+    console.log(
+      "[AGENDA API] Berhasil mengambil",
+      data.length,
+      "agenda"
+    );
+
+    return NextResponse.json(data, {
+      status: 200,
+      headers,
+    });
+
+  } catch (error: unknown) {
+    const details = getErrorDetails(error);
+
+    console.error(
+      "[AGENDA API] Gagal menghubungi WordPress:",
+      details
+    );
+
+    const isTimeout =
+      error instanceof Error &&
+      error.name === "AbortError";
 
     return NextResponse.json(
       {
         success: false,
 
-        error:
-          "Gagal menghubungi WordPress",
+        error: isTimeout
+          ? "Koneksi ke WordPress mengalami timeout"
+          : "Gagal menghubungi WordPress",
 
-        detail:
-          error instanceof Error
-            ? error.message
-            : String(error),
+        detail: details.message,
+        cause: details.cause,
+        code: details.code,
+
+        wordpress_api: WORDPRESS_API,
       },
-
       {
-        status: 500,
+        status: isTimeout ? 504 : 502,
       }
     );
-
   }
 }
