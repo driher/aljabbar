@@ -385,8 +385,8 @@ export default function NewsCard() {
                     group-hover:translate-x-1
                   "
                 >
-                  â†’
-                </span>
+                  →
+		/span>
 
               </div>
 
@@ -579,7 +579,7 @@ export default function NewsCard() {
                       group-hover:translate-x-1
                     "
                   >
-                    â†’
+                    →
                   </span>
 
                 </Link>
