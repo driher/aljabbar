@@ -386,7 +386,7 @@ export default function NewsCard() {
                   "
                 >
                   →
-		/span>
+		</span>
 
               </div>
 
